@@ -3,505 +3,396 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locabio | Professional Vocabulary Suite</title>
+    <title>Locabio | Advanced Vocabulary Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --brand-primary: #4f46e5;
-            --brand-secondary: #0ea5e9;
-            --bg-canvas: #f1f5f9;
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --text-strong: #0f172a;
+            --brand-primary: #6366f1; /* Indigo */
+            --brand-accent: #f43f5e;  /* Rose */
+            --bg-canvas: #f8fafc;
+            --sidebar-bg: #ffffff;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --shadow-hard: 0 20px 25px -5px rgba(79, 70, 229, 0.15);
-            --radius-lg: 24px;
-            --radius-md: 12px;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --radius-xl: 1.5rem;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: var(--text-strong);
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
             overflow-x: hidden;
         }
 
-        /* --- Layout Containers --- */
-        .app-shell {
-            width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 40px;
-            padding: 40px;
-        }
-
-        @media (max-width: 900px) {
-            .app-shell {
-                grid-template-columns: 1fr;
-                padding: 20px;
-            }
-            .sidebar { display: none; }
-        }
-
-        /* --- Sidebar / Stats --- */
+        /* --- Navigation Sidebar --- */
         .sidebar {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            border: 1px solid white;
-            box-shadow: var(--shadow-soft);
-            height: fit-content;
+            width: 320px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid #e2e8f0;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: sticky;
+            top: 0;
         }
 
-        .brand-logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--brand-primary);
-            margin-bottom: 30px;
+        .logo-area {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 3rem;
         }
 
-        .stat-item {
-            margin-bottom: 20px;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--brand-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
         }
 
-        .stat-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 5px;
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--text-main);
         }
 
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
+        .stat-group { margin-bottom: 2rem; }
+        .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--brand-primary); }
 
-        /* --- Main Study Area --- */
-        .main-stage {
+        /* --- Main Layout --- */
+        .content-engine {
+            flex: 1;
+            padding: 4rem;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
-        .header-meta {
+        .study-container {
             width: 100%;
-            max-width: 500px;
-            margin-bottom: 25px;
+            max-width: 600px;
         }
 
-        .progress-bar-bg {
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .progress-track {
             width: 100%;
-            height: 10px;
+            height: 8px;
             background: #e2e8f0;
-            border-radius: 20px;
-            margin-top: 10px;
+            border-radius: 100px;
             overflow: hidden;
+            margin-bottom: 3rem;
         }
 
-        .progress-fill {
+        .progress-bar {
             height: 100%;
+            background: linear-gradient(90deg, var(--brand-primary), #818cf8);
             width: 0%;
-            background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
-            transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: var(--transition-smooth);
         }
 
-        /* --- Flashcard Component --- */
-        .flashcard-wrapper {
-            width: 100%;
-            max-width: 500px;
-            height: 350px;
-            perspective: 1500px;
+        /* --- The Card --- */
+        .card-perspective {
+            perspective: 2000px;
+            height: 400px;
+            margin-bottom: 3rem;
         }
 
-        .flashcard {
+        .locabio-card {
             position: relative;
             width: 100%;
             height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
+        .locabio-card.flipped { transform: rotateY(180deg); }
 
-        .face {
+        .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 40px;
-            border-radius: var(--radius-lg);
+            justify-content: center;
+            padding: 3rem;
+            border-radius: var(--radius-xl);
             background: white;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(255,255,255,0.6);
-            text-align: center;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .face-front {
-            z-index: 2;
-        }
-
-        .face-back {
+        .card-back {
             transform: rotateY(180deg);
-            background: #fdfdfd;
+            background: #fafafa;
             border: 2px solid var(--brand-primary);
         }
 
-        .card-word {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text-strong);
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-
-        .card-pos {
-            background: #eef2ff;
-            color: var(--brand-primary);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .card-definition {
-            font-size: 1.4rem;
-            line-height: 1.5;
-            color: var(--text-strong);
-            font-weight: 500;
-        }
+        .display-word { font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-main); }
+        .display-pos { font-weight: 600; color: var(--brand-primary); font-size: 0.9rem; text-transform: uppercase; background: #eef2ff; padding: 4px 16px; border-radius: 50px; }
+        .display-def { font-size: 1.5rem; line-height: 1.6; text-align: center; color: var(--text-main); font-weight: 500; }
 
         /* --- Controls --- */
-        .action-tray {
-            margin-top: 40px;
+        .control-dock {
             display: flex;
-            gap: 20px;
+            gap: 1.5rem;
+            justify-content: center;
         }
 
-        .btn {
-            padding: 16px 32px;
-            border-radius: var(--radius-md);
+        .btn-action {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            border: none;
             font-family: inherit;
             font-weight: 700;
-            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: var(--transition-smooth);
+            font-size: 1rem;
         }
 
-        .btn-primary {
-            background: var(--brand-primary);
-            color: white;
-            box-shadow: var(--shadow-hard);
-        }
+        .btn-primary { background: var(--brand-primary); color: white; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-secondary { background: white; color: var(--text-muted); border: 1px solid #e2e8f0; }
+        .btn-secondary:hover { background: #f1f5f9; }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            filter: brightness(1.1);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--brand-primary);
-            color: var(--brand-primary);
-        }
-
-        .btn-outline:hover {
-            background: #eef2ff;
-        }
-
-        .keyboard-hint {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            opacity: 0.7;
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #e2e8f0; }
+            .content-engine { padding: 2rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="app-shell">
     <aside class="sidebar">
-        <div class="brand-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14-8-12-8 12 4-14V4h8z"/></svg>
-            Lumina SAT
-        </div>
-        
-        <div class="stat-item">
-            <div class="stat-label">Course Progress</div>
-            <div class="stat-value" id="percent-val">0%</div>
+        <div class="logo-area">
+            <div class="logo-icon">L</div>
+            <div class="logo-text">Locabio</div>
         </div>
 
-        <div class="stat-item">
-            <div class="stat-label">Words Mastered</div>
-            <div class="stat-value" id="mastered-val">0 / 100</div>
+        <div class="stat-group">
+            <div class="stat-label">Mastery Level</div>
+            <div class="stat-value" id="percent-text">0%</div>
         </div>
 
-        <div class="stat-item" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-            <div class="stat-label" style="font-size: 0.65rem;">Active Session</div>
-            <div id="session-timer" style="font-weight: 600;">00:00</div>
+        <div class="stat-group">
+            <div class="stat-label">Session Words</div>
+            <div class="stat-value" id="word-count">0 / 100</div>
+        </div>
+
+        <div style="margin-top: auto;">
+            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Press [Space] to flip<br>Press [→] for next</p>
         </div>
     </aside>
 
-    <main class="main-stage">
-        <div class="header-meta">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <h2 style="font-weight: 800; font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted);">Current Vocabulary</h2>
-                <span id="counter" style="font-weight: 700; color: var(--brand-primary);">1 / 100</span>
+    <main class="content-engine">
+        <div class="study-container">
+            <div class="progress-header">
+                <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">CURRENT SESSION</span>
+                <span id="tracker" style="font-weight: 800; color: var(--brand-primary);">1 / 100</span>
             </div>
-            <div class="progress-bar-bg">
-                <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-track">
+                <div class="progress-bar" id="pb"></div>
             </div>
-        </div>
 
-        <div class="flashcard-wrapper">
-            <div class="flashcard" id="card" onclick="flipCard()">
-                <div class="face face-front">
-                    <div class="card-word" id="word">Loading</div>
-                    <div class="card-pos" id="pos">...</div>
+            <div class="card-perspective">
+                <div class="locabio-card" id="card" onclick="toggleFlip()">
+                    <div class="card-side card-front">
+                        <div class="display-word" id="w">Abate</div>
+                        <div class="display-pos" id="p">verb</div>
+                    </div>
+                    <div class="card-side card-back">
+                        <div class="display-def" id="d">To become less active, less intense, or less in amount.</div>
+                    </div>
                 </div>
-                <div class="face face-back">
-                    <div class="card-definition" id="definition">...</div>
-                </div>
             </div>
-        </div>
 
-        <div class="action-tray">
-            <button class="btn btn-outline" onclick="prevWord()">Previous</button>
-            <button class="btn btn-primary" onclick="nextWord()">Next Word →</button>
-        </div>
-
-        <div class="keyboard-hint">
-            Tip: Use <b>Space</b> to flip and <b>Arrow Keys</b> to navigate
+            <div class="control-dock">
+                <button class="btn-action btn-secondary" onclick="prev()">Previous</button>
+                <button class="btn-action btn-primary" onclick="next()">Next Word</button>
+            </div>
         </div>
     </main>
-</div>
 
-<script>
-    // EXPANDED DATASET (100+ High-Yield SAT Words)
-    const database = [
-        { word: "Abate", pos: "Verb", def: "To become less active, less intense, or less in amount." },
-        { word: "Adroit", pos: "Adj", def: "Clever or skillful in using the hands or mind." },
-        { word: "Anomalous", pos: "Adj", def: "Deviating from what is standard, normal, or expected." },
-        { word: "Capricious", pos: "Adj", def: "Given to sudden and unaccountable changes of mood or behavior." },
-        { word: "Diligent", pos: "Adj", def: "Having or showing care and conscientiousness in one's work." },
-        { word: "Ephemeral", pos: "Adj", def: "Lasting for a very short time." },
-        { word: "Pragmatic", pos: "Adj", def: "Dealing with things sensibly and realistically." },
-        { word: "Scrutinize", pos: "Verb", def: "To examine or inspect closely and thoroughly." },
-        { word: "Alacrity", pos: "Noun", def: "Brisk and cheerful readiness." },
-        { word: "Belligerent", pos: "Adj", def: "Hostile and aggressive." },
-        { word: "Candid", pos: "Adj", def: "Truthful and straightforward; frank." },
-        { word: "Deference", pos: "Noun", def: "Humble submission and respect." },
-        { word: "Eloquence", pos: "Noun", def: "Fluent or persuasive speaking or writing." },
-        { word: "Fastidious", pos: "Adj", def: "Very attentive to and concerned about accuracy and detail." },
-        { word: "Garrulous", pos: "Adj", def: "Excessively talkative, especially on trivial matters." },
-        { word: "Harangue", pos: "Noun", def: "A lengthy and aggressive speech." },
-        { word: "Iconoclast", pos: "Noun", def: "A person who attacks cherished beliefs or institutions." },
-        { word: "Jovial", pos: "Adj", def: "Cheerful and friendly." },
-        { word: "Laconic", pos: "Adj", def: "Using very few words." },
-        { word: "Meticulous", pos: "Adj", def: "Showing great attention to detail; very careful." },
-        { word: "Nefarious", pos: "Adj", def: "Wicked or criminal." },
-        { word: "Obsequious", pos: "Adj", def: "Obedient or attentive to an excessive or servile degree." },
-        { word: "Pensive", pos: "Adj", def: "Engaged in, involving, or reflecting deep or serious thought." },
-        { word: "Quixotic", pos: "Adj", def: "Exceedingly idealistic; unrealistic and impractical." },
-        { word: "Reticent", pos: "Adj", def: "Not revealing one's thoughts or feelings readily." },
-        { word: "Sanguine", pos: "Adj", def: "Optimistic or positive, especially in an apparently bad situation." },
-        { word: "Taciturn", pos: "Adj", def: "Reserved or uncommunicative in speech; saying little." },
-        { word: "Ubiquitous", pos: "Adj", def: "Present, appearing, or found everywhere." },
-        { word: "Venerable", pos: "Adj", def: "Accorded a great deal of respect, especially because of age or wisdom." },
-        { word: "Wary", pos: "Adj", def: "Feeling or showing caution about possible dangers or problems." },
-        { word: "Zealot", pos: "Noun", def: "A person who is fanatical and uncompromising in pursuit of their ideals." },
-        { word: "Abstain", pos: "Verb", def: "Restrain oneself from doing or enjoying something." },
-        { word: "Benevolent", pos: "Adj", def: "Well meaning and kindly." },
-        { word: "Corroborate", pos: "Verb", def: "Confirm or give support to a statement or theory." },
-        { word: "Docile", pos: "Adj", def: "Ready to accept control or instruction; submissive." },
-        { word: "Enigma", pos: "Noun", def: "A person or thing that is mysterious, puzzling, or difficult to understand." },
-        { word: "Fervid", pos: "Adj", def: "Intensely enthusiastic or passionate." },
-        { word: "Gullible", pos: "Adj", def: "Easily persuaded to believe something." },
-        { word: "Homogeneous", pos: "Adj", def: "Of the same kind; alike." },
-        { word: "Inevitable", pos: "Adj", def: "Certain to happen; unavoidable." },
-        { word: "Lethargic", pos: "Adj", def: "Affected by lethargy; sluggish and apathetic." },
-        { word: "Mitigate", pos: "Verb", def: "Make less severe, serious, or painful." },
-        { word: "Nonchalant", pos: "Adj", def: "Feeling or appearing casually calm and relaxed." },
-        { word: "Opaque", pos: "Adj", def: "Not able to be seen through; not transparent." },
-        { word: "Placate", pos: "Verb", def: "Make someone less angry or hostile." },
-        { word: "Propriety", pos: "Noun", def: "The state or quality of conforming to conventionally accepted standards of behavior." },
-        { word: "Quiescent", pos: "Adj", def: "In a state or period of inactivity or dormancy." },
-        { word: "Refute", pos: "Verb", def: "Prove a statement or theory to be wrong or false; disprove." },
-        { word: "Spurious", pos: "Adj", def: "Not being what it purports to be; false or fake." },
-        { word: "Tractable", pos: "Adj", def: "Easy to control or influence." },
-        { word: "Vacillate", pos: "Verb", def: "Alternate or waver between different opinions or actions." },
-        { word: "Waver", pos: "Verb", def: "Shake with a quivering motion; become unsteady." },
-        { word: "Adulterate", pos: "Verb", def: "Render something poorer in quality by adding another substance." },
-        { word: "Anachronism", pos: "Noun", def: "A thing belonging or appropriate to a period other than that in which it exists." },
-        { word: "Audacious", pos: "Adj", def: "Showing a willingness to take surprisingly bold risks." },
-        { word: "Chicanery", pos: "Noun", def: "The use of trickery to achieve a political, financial, or legal purpose." },
-        { word: "Desiccate", pos: "Verb", def: "Remove the moisture from something; cause to become completely dry." },
-        { word: "Ephemeral", pos: "Adj", def: "Lasting for a very short time." },
-        { word: "Gullible", pos: "Adj", def: "Easily persuaded to believe something; credulous." },
-        { word: "Laudable", pos: "Adj", def: "Deserving praise and commendation." },
-        { word: "Loquacious", pos: "Adj", def: "Tending to talk a great deal; talkative." },
-        { word: "Malleable", pos: "Adj", def: "Able to be hammered or pressed permanently out of shape." },
-        { word: "Ostentation", pos: "Noun", def: "Pretentious and vulgar display, especially of wealth and luxury." },
-        { word: "Prevaricate", pos: "Verb", def: "Speak or act in an evasive way." },
-        { word: "Volatile", pos: "Adj", def: "Liable to change rapidly and unpredictably, especially for the worse." },
-        { word: "Apathy", pos: "Noun", def: "Lack of interest, enthusiasm, or concern." },
-        { word: "Assuage", pos: "Verb", def: "Make an unpleasant feeling less intense." },
-        { word: "Enervate", pos: "Verb", def: "Cause someone to feel drained of energy or vitality; weaken." },
-        { word: "Equivocal", pos: "Adj", def: "Open to more than one interpretation; ambiguous." },
-        { word: "Erudite", pos: "Adj", def: "Having or showing great knowledge or learning." },
-        { word: "Lucid", pos: "Adj", def: "Expressed clearly; easy to understand." },
-        { word: "Opaque", pos: "Adj", def: "Not able to be seen through; not transparent." },
-        { word: "Precipitate", pos: "Verb", def: "Cause an event or situation to happen suddenly, unexpectedly, or prematurely." },
-        { word: "Prodigal", pos: "Adj", def: "Spending money or resources freely and recklessly." },
-        { word: "Zeal", pos: "Noun", def: "Great energy or enthusiasm in pursuit of a cause or an objective." },
-        { word: "Abstemious", pos: "Adj", def: "Not self-indulgent, especially when eating and drinking." },
-        { word: "Banal", pos: "Adj", def: "So lacking in originality as to be obvious and boring." },
-        { word: "Cogent", pos: "Adj", def: "Clear, logical, and convincing." },
-        { word: "Delineate", pos: "Verb", def: "Describe or portray something precisely." },
-        { word: "Efficacy", pos: "Noun", def: "The ability to produce a desired or intended result." },
-        { word: "Foment", pos: "Verb", def: "Instigate or stir up an undesirable or violent sentiment or course of action." },
-        { word: "Gainsay", pos: "Verb", def: "Deny or contradict a fact or statement." },
-        { word: "Innocuous", pos: "Adj", def: "Not harmful or offensive." },
-        { word: "Insular", pos: "Adj", def: "Ignorant of or uninterested in cultures, ideas, or peoples outside one's own experience." },
-        { word: "Lethargic", pos: "Adj", def: "Sluggish and apathetic." },
-        { word: "Misanthrope", pos: "Noun", def: "A person who dislikes humankind and avoids human society." },
-        { word: "Obdurate", pos: "Adj", def: "Stubbornly refusing to change one's opinion or course of action." },
-        { word: "Paradox", pos: "Noun", def: "A seemingly absurd or self-contradictory statement that when investigated may prove to be true." },
-        { word: "Philanthropic", pos: "Adj", def: "Seeking to promote the welfare of others, especially by donating money." },
-        { word: "Rarefy", pos: "Verb", def: "To make or become thin, less dense, or refined." },
-        { word: "Sovereign", pos: "Noun", def: "A supreme ruler, especially a monarch." },
-        { word: "Torpid", pos: "Adj", def: "Mentally or physically inactive; lethargic." },
-        { word: "Venerate", pos: "Verb", def: "Regard with great respect; revere." },
-        { word: "Articulate", pos: "Adj", def: "Showing the ability to speak fluently and coherently." },
-        { word: "Dogmatic", pos: "Adj", def: "Inclined to lay down principles as incontrovertibly true." },
-        { word: "Hopple", pos: "Verb", def: "To limit the freedom or progress of." },
-        { word: "Inchoate", pos: "Adj", def: "Just begun and so not fully formed or developed." },
-        { word: "Plastic", pos: "Adj", def: "Easily shaped or molded." },
-        { word: "Stolid", pos: "Adj", def: "Calm, dependable, and showing little emotion." },
-        { word: "Viable", pos: "Adj", def: "Capable of working successfully; feasible." }
-    ];
+    <script>
+        // EXPANDED DATASET (High-Impact SAT/GRE Vocabulary)
+        const words = [
+            {w:"Abate", p:"verb", d:"To reduce in amount, degree, or intensity; subside."},
+            {w:"Aberration", p:"noun", d:"A departure from what is normal, usual, or expected."},
+            {w:"Abjure", p:"verb", d:"To solemnly renounce a belief, cause, or claim."},
+            {w:"Anomalous", p:"adj", d:"Deviating from what is standard, normal, or expected."},
+            {w:"Belligerent", p:"adj", d:"Hostile and aggressive; ready to fight."},
+            {w:"Capricious", p:"adj", d:"Given to sudden and unaccountable changes of mood."},
+            {w:"Chicanery", p:"noun", d:"The use of trickery to achieve a political or legal purpose."},
+            {w:"Cogent", p:"adj", d:"Clear, logical, and convincing (of an argument)."},
+            {w:"Deference", p:"noun", d:"Humble submission and respect."},
+            {w:"Desiccate", p:"verb", d:"To remove the moisture from something; cause to dry out."},
+            {w:"Diligent", p:"adj", d:"Having or showing care and conscientiousness in work."},
+            {w:"Enervate", p:"verb", d:"To cause someone to feel drained of energy; weaken."},
+            {w:"Ephemeral", p:"adj", d:"Lasting for a very short time."},
+            {w:"Equivocal", p:"adj", d:"Open to more than one interpretation; ambiguous."},
+            {w:"Erudite", p:"adj", d:"Having or showing great knowledge or learning."},
+            {w:"Esoteric", p:"adj", d:"Intended for or understood by only a small number of people."},
+            {w:"Fastidious", p:"adj", d:"Very attentive to and concerned about accuracy and detail."},
+            {w:"Fervid", p:"adj", d:"Intensely enthusiastic or passionate, especially to an excessive degree."},
+            {w:"Garrulous", p:"adj", d:"Excessively talkative, especially on trivial matters."},
+            {w:"Guile", p:"noun", d:"Sly or cunning intelligence; deceit."},
+            {w:"Homogeneous", p:"adj", d:"Of the same kind; alike."},
+            {w:"Iconoclast", p:"noun", d:"A person who attacks cherished beliefs or institutions."},
+            {w:"Impetuous", p:"adj", d:"Acting or done quickly and without thought or care."},
+            {w:"Inchoate", p:"adj", d:"Just begun and so not fully formed or developed."},
+            {w:"Innocuous", p:"adj", d:"Not harmful or offensive; harmless."},
+            {w:"Insular", p:"adj", d:"Ignorant of or uninterested in cultures outside one's own."},
+            {w:"Intransigent", p:"adj", d:"Unwilling or refusing to change one's views or to agree."},
+            {w:"Inundate", p:"verb", d:"To overwhelm (someone) with things or people to be dealt with."},
+            {w:"Laconic", p:"adj", d:"(of a person, speech, or style) using very few words."},
+            {w:"Lethargic", p:"adj", d:"Affected by lethargy; sluggish and apathetic."},
+            {w:"Loquacious", p:"adj", d:"Tending to talk a great deal; talkative."},
+            {w:"Lucid", p:"adj", d:"Expressed clearly; easy to understand."},
+            {w:"Malleable", p:"adj", d:"Able to be hammered or pressed out of shape without breaking."},
+            {w:"Meticulous", p:"adj", d:"Showing great attention to detail; very careful."},
+            {w:"Mitigate", p:"verb", d:"To make less severe, serious, or painful."},
+            {w:"Mollify", p:"verb", d:"To appease the anger or anxiety of (someone)."},
+            {w:"Obdurate", p:"adj", d:"Stubbornly refusing to change one's opinion or course of action."},
+            {w:"Obsequious", p:"adj", d:"Obedient or attentive to an excessive or servile degree."},
+            {w:"Opaque", p:"adj", d:"Not able to be seen through; not transparent."},
+            {w:"Ostentation", p:"noun", d:"Pretentious display, especially of wealth and luxury."},
+            {w:"Paradox", p:"noun", d:"A seemingly absurd or self-contradictory statement."},
+            {w:"Pedantic", p:"adj", d:"Excessively concerned with minor details or rules."},
+            {w:"Philanthropic", p:"adj", d:"Seeking to promote the welfare of others."},
+            {w:"Placate", p:"verb", d:"To make (someone) less angry or hostile."},
+            {w:"Pragmatic", p:"adj", d:"Dealing with things sensibly and realistically."},
+            {w:"Precipitate", p:"verb", d:"To cause (an event) to happen suddenly or prematurely."},
+            {w:"Prevaricate", p:"verb", d:"To speak or act in an evasive way."},
+            {w:"Prodigal", p:"adj", d:"Spending money or resources freely and recklessly."},
+            {w:"Propriety", p:"noun", d:"The state or quality of conforming to accepted standards."},
+            {w:"Quiescent", p:"adj", d:"In a state or period of inactivity or dormancy."},
+            {w:"Rarefy", p:"verb", d:"To make or become thin, less dense, or refined."},
+            {w:"Reticent", p:"adj", d:"Not revealing one's thoughts or feelings readily."},
+            {w:"Sanguine", p:"adj", d:"Optimistic or positive, especially in a bad situation."},
+            {w:"Soporific", p:"adj", d:"Tending to induce drowsiness or sleep."},
+            {w:"Specious", p:"adj", d:"Superficially plausible, but actually wrong."},
+            {w:"Stolid", p:"adj", d:"Calm, dependable, and showing little emotion."},
+            {w:"Taciturn", p:"adj", d:"(of a person) reserved or uncommunicative in speech."},
+            {w:"Tractable", p:"adj", d:"(of a person or animal) easy to control or influence."},
+            {w:"Ubiquitous", p:"adj", d:"Present, appearing, or found everywhere."},
+            {w:"Vacillate", p:"verb", d:"To alternate or waver between different opinions."},
+            {w:"Venerate", p:"verb", d:"To regard with great respect; revere."},
+            {w:"Veracity", p:"noun", d:"Conformity to facts; accuracy; habitual truthfulness."},
+            {w:"Verbose", p:"adj", d:"Using or expressed in more words than are needed."},
+            {w:"Volatile", p:"adj", d:"Liable to change rapidly and unpredictably."},
+            {w:"Zeal", p:"noun", d:"Great energy or enthusiasm in pursuit of a cause."},
+            {w:"Abstemious", p:"adj", d:"Not self-indulgent, especially when eating and drinking."},
+            {w:"Admonish", p:"verb", d:"To warn or reprimand someone firmly."},
+            {w:"Adulterate", p:"verb", d:"To make something poorer in quality by adding a substance."},
+            {w:"Alacrity", p:"noun", d:"Brisk and cheerful readiness."},
+            {w:"Anachronism", p:"noun", d:"A thing belonging to a period other than that in which it exists."},
+            {w:"Apathy", p:"noun", d:"Lack of interest, enthusiasm, or concern."},
+            {w:"Assuage", p:"verb", d:"To make (an unpleasant feeling) less intense."},
+            {w:"Audacious", p:"adj", d:"Showing a willingness to take surprisingly bold risks."},
+            {w:"Austere", p:"adj", d:"Severe or strict in manner, attitude, or appearance."},
+            {w:"Banal", p:"adj", d:"So lacking in originality as to be obvious and boring."},
+            {w:"Bolster", p:"verb", d:"To support or strengthen; prop up."},
+            {w:"Bombastic", p:"adj", d:"High-sounding but with little meaning; inflated."},
+            {w:"Candid", p:"adj", d:"Truthful and straightforward; frank."},
+            {w:"Castigate", p:"verb", d:"To reprimand (someone) severely."},
+            {w:"Caustic", p:"adj", d:"Sarcastic in a scathing and bitter way."},
+            {w:"Condone", p:"verb", d:"To accept and allow (wrong behavior) to continue."},
+            {w:"Convoluted", p:"adj", d:"Extremely complex and difficult to follow."},
+            {w:"Decorum", p:"noun", d:"Behavior in keeping with good taste and propriety."},
+            {w:"Delineate", p:"verb", d:"To describe or portray something precisely."},
+            {w:"Demur", p:"verb", d:"To raise doubts or objections or show reluctance."},
+            {w:"Deride", p:"verb", d:"To express contempt for; ridicule."},
+            {w:"Diatribe", p:"noun", d:"A forceful and bitter verbal attack against something."},
+            {w:"Disabuse", p:"verb", d:"To persuade someone that an idea or belief is mistaken."},
+            {w:"Disparate", p:"adj", d:"Essentially different in kind; not allowing comparison."},
+            {w:"Dogmatic", p:"adj", d:"Inclined to lay down principles as incontrovertibly true."},
+            {w:"Eclectic", p:"adj", d:"Deriving ideas from a diverse range of sources."},
+            {w:"Elegy", p:"noun", d:"A poem of serious reflection, typically a lament for the dead."},
+            {w:"Eloquence", p:"noun", d:"Fluent or persuasive speaking or writing."},
+            {w:"Exacerbate", p:"verb", d:"To make (a problem or bad situation) worse."},
+            {w:"Exculpate", p:"verb", d:"To show or declare that someone is not guilty of wrongdoing."},
+            {w:"Exigent", p:"adj", d:"Pressing; demanding."},
+            {w:"Foment", p:"verb", d:"To instigate or stir up (an undesirable course of action)."},
+            {w:"Gainsay", p:"verb", d:"To deny or contradict (a fact or statement)."},
+            {w:"Inoculate", p:"verb", d:"To treat with a vaccine to produce immunity."},
+            {w:"Luminous", p:"adj", d:"Full of or shedding light; bright or shining."}
+        ];
 
-    let state = {
-        currentIndex: 0,
-        isFlipped: false,
-        startTime: Date.now()
-    };
+        let idx = 0;
+        let isFlipped = false;
 
-    // DOM Elements
-    const elements = {
-        card: document.getElementById('card'),
-        word: document.getElementById('word'),
-        pos: document.getElementById('pos'),
-        def: document.getElementById('definition'),
-        counter: document.getElementById('counter'),
-        progress: document.getElementById('progress-fill'),
-        percent: document.getElementById('percent-val'),
-        mastered: document.getElementById('mastered-val'),
-        timer: document.getElementById('session-timer')
-    };
+        function update() {
+            const word = words[idx];
+            document.getElementById('w').textContent = word.w;
+            document.getElementById('p').textContent = word.p;
+            document.getElementById('d').textContent = word.d;
+            
+            const count = idx + 1;
+            const total = words.length;
+            const pct = Math.round((count / total) * 100);
 
-    function updateUI() {
-        const item = database[state.currentIndex];
-        
-        // Text Updates
-        elements.word.textContent = item.word;
-        elements.pos.textContent = item.pos;
-        elements.def.textContent = item.def;
-        
-        // Stats
-        const currentCount = state.currentIndex + 1;
-        const total = database.length;
-        const percent = Math.round((currentCount / total) * 100);
-        
-        elements.counter.textContent = `${currentCount} / ${total}`;
-        elements.progress.style.width = `${percent}%`;
-        elements.percent.textContent = `${percent}%`;
-        elements.mastered.textContent = `${state.currentIndex} / ${total}`;
-    }
-
-    function flipCard() {
-        state.isFlipped = !state.isFlipped;
-        elements.card.classList.toggle('flipped', state.isFlipped);
-    }
-
-    function nextWord() {
-        if (state.isFlipped) {
-            flipCard();
-            setTimeout(proceed, 250);
-        } else {
-            proceed();
+            document.getElementById('tracker').textContent = `${count} / ${total}`;
+            document.getElementById('word-count').textContent = `${count} / ${total}`;
+            document.getElementById('percent-text').textContent = `${pct}%`;
+            document.getElementById('pb').style.width = `${pct}%`;
         }
 
-        function proceed() {
-            state.currentIndex = (state.currentIndex + 1) % database.length;
-            updateUI();
-        }
-    }
-
-    function prevWord() {
-        if (state.isFlipped) {
-            flipCard();
-            setTimeout(goBack, 250);
-        } else {
-            goBack();
+        function toggleFlip() {
+            isFlipped = !isFlipped;
+            document.getElementById('card').classList.toggle('flipped', isFlipped);
         }
 
-        function goBack() {
-            state.currentIndex = state.currentIndex === 0 ? database.length - 1 : state.currentIndex - 1;
-            updateUI();
+        function next() {
+            if (isFlipped) {
+                toggleFlip();
+                setTimeout(() => { idx = (idx + 1) % words.length; update(); }, 300);
+            } else {
+                idx = (idx + 1) % words.length;
+                update();
+            }
         }
-    }
 
-    // Keyboard Controls
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space') {
-            e.preventDefault();
-            flipCard();
+        function prev() {
+            if (isFlipped) {
+                toggleFlip();
+                setTimeout(() => { idx = idx === 0 ? words.length - 1 : idx - 1; update(); }, 300);
+            } else {
+                idx = idx === 0 ? words.length - 1 : idx - 1;
+                update();
+            }
         }
-        if (e.code === 'ArrowRight') nextWord();
-        if (e.code === 'ArrowLeft') prevWord();
-    });
 
-    // Timer Logic
-    setInterval(() => {
-        const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-        const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
-        const secs = (elapsed % 60).toString().padStart(2, '0');
-        elements.timer.textContent = `${mins}:${secs}`;
-    }, 1000);
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') { e.preventDefault(); toggleFlip(); }
+            if (e.code === 'ArrowRight') next();
+            if (e.code === 'ArrowLeft') prev();
+        });
 
-    // Initial Load
-    updateUI();
-
-</script>
+        update();
+    </script>
 </body>
 </html>
