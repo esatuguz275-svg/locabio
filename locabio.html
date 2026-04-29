@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locabio | Advanced Vocabulary Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #6366f1;
+            --brand-accent: #f43f5e;
+            --bg-canvas: #f8fafc;
+            --sidebar-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --radius-xl: 1.5rem;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 300px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+        .logo-area { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; }
+        .logo-icon {
+            width: 38px; height: 38px;
+            background: var(--brand-primary);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800; font-size: 1.1rem;
+        }
+        .logo-text { font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; }
+
+        /* Deck Tabs */
+        .deck-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .deck-tab {
+            flex: 1; padding: 0.6rem 0.5rem; border-radius: 10px;
+            border: 2px solid #e2e8f0; background: white;
+            font-family: inherit; font-weight: 700; font-size: 0.8rem;
+            cursor: pointer; transition: var(--transition-smooth);
+            color: var(--text-muted); text-align: center;
+        }
+        .deck-tab.active { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
+        .deck-tab:hover:not(.active) { border-color: var(--brand-primary); color: var(--brand-primary); }
+
+        .stat-group { margin-bottom: 1.25rem; }
+        .stat-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.05em; }
+        .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--brand-primary); }
+
+        /* Custom Deck Manager */
+        .custom-manager {
+            margin-top: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .custom-manager-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .custom-manager-title { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .btn-add-card {
+            background: var(--brand-primary); color: white;
+            border: none; border-radius: 8px;
+            padding: 0.3rem 0.7rem; font-family: inherit;
+            font-weight: 700; font-size: 0.75rem; cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .btn-add-card:hover { filter: brightness(1.1); }
+
+        .custom-cards-list { max-height: 260px; overflow-y: auto; }
+        .custom-card-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.6rem 1rem; border-bottom: 1px solid #e2e8f0;
+            font-size: 0.82rem; gap: 0.5rem;
+        }
+        .custom-card-item:last-child { border-bottom: none; }
+        .custom-card-item .word-name { font-weight: 700; color: var(--text-main); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .custom-card-item .word-pos { font-size: 0.7rem; color: var(--brand-primary); font-weight: 600; background: #eef2ff; padding: 2px 8px; border-radius: 50px; white-space: nowrap; }
+        .item-actions { display: flex; gap: 0.25rem; flex-shrink: 0; }
+        .btn-icon {
+            background: none; border: none; cursor: pointer;
+            padding: 4px; border-radius: 6px; transition: var(--transition-smooth);
+            font-size: 0.85rem;
+        }
+        .btn-icon:hover { background: #e2e8f0; }
+
+        .empty-custom {
+            text-align: center; padding: 2rem 1rem;
+            color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;
+        }
+        .empty-custom .emoji { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+
+        /* Keyboard hints */
+        .kbd-hints { margin-top: auto; padding-top: 1rem; }
+        .kbd-hints p { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; line-height: 1.8; }
+        kbd {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 4px; padding: 1px 6px; font-size: 0.7rem;
+            font-family: inherit; font-weight: 700;
+        }
+
+        /* --- Main Content --- */
+        .content-engine {
+            flex: 1; padding: 3rem 4rem;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .study-container { width: 100%; max-width: 600px; }
+
+        .progress-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .progress-label { font-weight: 700; font-size: 0.85rem; color: var(--text-muted); }
+        .progress-counter { font-weight: 800; color: var(--brand-primary); font-size: 0.9rem; }
+
+        .progress-track {
+            width: 100%; height: 8px; background: #e2e8f0;
+            border-radius: 100px; overflow: hidden; margin-bottom: 2.5rem;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand-primary), #818cf8);
+            width: 0%; transition: var(--transition-smooth);
+        }
+
+        /* Card */
+        .card-perspective { perspective: 2000px; height: 380px; margin-bottom: 2.5rem; }
+        .locabio-card {
+            position: relative; width: 100%; height: 100%;
+            cursor: pointer; transform-style: preserve-3d;
+            transition: transform 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .locabio-card.flipped { transform: rotateY(180deg); }
+        .card-side {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 2.5rem; border-radius: var(--radius-xl);
+            background: white; box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            background: #fafafa;
+            border: 2px solid var(--brand-primary);
+        }
+        .card-hint {
+            position: absolute; bottom: 1.25rem;
+            font-size: 0.7rem; color: #cbd5e1; font-weight: 600;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+        .display-word { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-main); text-align: center; }
+        .display-pos {
+            font-weight: 700; color: var(--brand-primary); font-size: 0.85rem;
+            text-transform: uppercase; background: #eef2ff;
+            padding: 4px 16px; border-radius: 50px;
+        }
+        .display-def {
+            font-size: 1.3rem; line-height: 1.65; text-align: center;
+            color: var(--text-main); font-weight: 500;
+        }
+
+        /* Controls */
+        .control-dock { display: flex; gap: 1rem; justify-content: center; align-items: center; }
+        .btn-action {
+            padding: 0.9rem 2rem; border-radius: 12px; border: none;
+            font-family: inherit; font-weight: 700; cursor: pointer;
+            transition: var(--transition-smooth); font-size: 0.95rem;
+        }
+        .btn-primary { background: var(--brand-primary); color: white; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-secondary { background: white; color: var(--text-muted); border: 1px solid #e2e8f0; }
+        .btn-secondary:hover { background: #f1f5f9; }
+        .btn-shuffle {
+            background: white; border: 1px solid #e2e8f0; color: var(--text-muted);
+            padding: 0.9rem 1.1rem; font-size: 1rem; border-radius: 12px;
+        }
+        .btn-shuffle:hover { background: #f1f5f9; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center; padding: 4rem 2rem;
+        }
+        .empty-state .big-emoji { font-size: 4rem; margin-bottom: 1rem; }
+        .empty-state h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .empty-state p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100; backdrop-filter: blur(4px);
+            opacity: 0; pointer-events: none; transition: opacity 0.25s;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal {
+            background: white; border-radius: 20px;
+            padding: 2rem; width: 90%; max-width: 480px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            transform: scale(0.95); transition: transform 0.25s;
+        }
+        .modal-overlay.open .modal { transform: scale(1); }
+        .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+        .form-input, .form-select, .form-textarea {
+            width: 100%; padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0; border-radius: 10px;
+            font-family: inherit; font-size: 0.95rem; color: var(--text-main);
+            transition: border-color 0.2s; outline: none; background: white;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--brand-primary); }
+        .form-textarea { resize: vertical; min-height: 90px; }
+        .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+        .btn-cancel {
+            flex: 1; padding: 0.8rem; border-radius: 10px;
+            border: 2px solid #e2e8f0; background: white;
+            font-family: inherit; font-weight: 700; cursor: pointer;
+            color: var(--text-muted); transition: var(--transition-smooth);
+        }
+        .btn-cancel:hover { background: #f1f5f9; }
+        .btn-save {
+            flex: 2; padding: 0.8rem; border-radius: 10px;
+            border: none; background: var(--brand-primary); color: white;
+            font-family: inherit; font-weight: 700; cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .btn-save:hover { filter: brightness(1.1); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #0f172a; color: white; padding: 0.75rem 1.5rem;
+            border-radius: 50px; font-weight: 600; font-size: 0.9rem;
+            z-index: 200; transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+            pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 1100px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; }
+            .custom-cards-list { max-height: 200px; }
+            .content-engine { padding: 2rem; }
+            .card-perspective { height: 320px; }
+            .display-word { font-size: 2.2rem; }
+            .display-def { font-size: 1.1rem; }
+        }
+        @media (max-width: 480px) {
+            .content-engine { padding: 1.5rem 1rem; }
+            .btn-action { padding: 0.8rem 1.25rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="logo-area">
+        <div class="logo-icon">L</div>
+        <div class="logo-text">Locabio</div>
+    </div>
+
+    <div class="deck-tabs">
+        <button class="deck-tab active" id="tab-sat" onclick="switchDeck('sat')">📚 SAT Words</button>
+        <button class="deck-tab" id="tab-custom" onclick="switchDeck('custom')">✏️ My Cards</button>
+    </div>
+
+    <div class="stat-group">
+        <div class="stat-label">Mastery Level</div>
+        <div class="stat-value" id="percent-text">0%</div>
+    </div>
+    <div class="stat-group">
+        <div class="stat-label">Progress</div>
+        <div class="stat-value" id="word-count">0 / 0</div>
+    </div>
+    <div class="stat-group" id="deck-size-group">
+        <div class="stat-label">Deck Size</div>
+        <div class="stat-value" id="deck-size">1,003</div>
+    </div>
+
+    <!-- Custom deck manager (shown in My Cards tab) -->
+    <div class="custom-manager" id="custom-manager" style="display:none;">
+        <div class="custom-manager-header">
+            <span class="custom-manager-title">My Flashcards</span>
+            <button class="btn-add-card" onclick="openModal()">+ Add Card</button>
+        </div>
+        <div class="custom-cards-list" id="custom-cards-list">
+            <div class="empty-custom">
+                <span class="emoji">📝</span>
+                No cards yet. Add your first flashcard!
+            </div>
+        </div>
+    </div>
+
+    <div class="kbd-hints">
+        <p><kbd>Space</kbd> Flip card<br>
+        <kbd>→</kbd> Next &nbsp; <kbd>←</kbd> Previous<br>
+        <kbd>S</kbd> Shuffle deck</p>
+    </div>
+</aside>
+
+<main class="content-engine">
+    <div class="study-container" id="study-container">
+        <div class="progress-header">
+            <span class="progress-label" id="deck-label">SAT WORDS</span>
+            <span class="progress-counter" id="tracker">1 / 1003</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-bar" id="pb"></div>
+        </div>
+
+        <div class="card-perspective" id="card-area">
+            <div class="locabio-card" id="card" onclick="toggleFlip()">
+                <div class="card-side card-front">
+                    <div class="display-word" id="w">Abate</div>
+                    <div class="display-pos" id="p">verb</div>
+                    <span class="card-hint">Click to reveal</span>
+                </div>
+                <div class="card-side card-back">
+                    <div class="display-def" id="d">To reduce in amount, degree, or intensity; subside.</div>
+                    <span class="card-hint">Click to hide</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty state for custom deck -->
+        <div id="empty-state" class="empty-state" style="display:none;">
+            <div class="big-emoji">✏️</div>
+            <h2>No flashcards yet</h2>
+            <p>Add your first card using the sidebar to start studying!</p>
+            <button class="btn-action btn-primary" onclick="openModal()">+ Add First Card</button>
+        </div>
+
+        <div class="control-dock" id="control-dock">
+            <button class="btn-action btn-secondary" onclick="prev()">← Previous</button>
+            <button class="btn-action btn-primary" onclick="next()">Next →</button>
+            <button class="btn-action btn-shuffle" onclick="shuffleDeck()" title="Shuffle (S)">🔀</button>
+        </div>
+    </div>
+</main>
+
+<!-- Add/Edit Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+    <div class="modal">
+        <div class="modal-title" id="modal-title">Add Flashcard</div>
+        <div class="form-group">
+            <label class="form-label">Word / Term</label>
+            <input class="form-input" id="input-word" placeholder="e.g. Ephemeral" type="text" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Part of Speech</label>
+            <select class="form-select" id="input-pos">
+                <option value="noun">Noun</option>
+                <option value="verb">Verb</option>
+                <option value="adj">Adjective</option>
+                <option value="adv">Adverb</option>
+                <option value="phrase">Phrase</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Definition</label>
+            <textarea class="form-textarea" id="input-def" placeholder="e.g. Lasting for a very short time."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            <button class="btn-save" onclick="saveCard()">Save Card</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// SAT / GRE WORD LIST — 1003 words
+// ============================================================
+const satWords = [
+{w:"Abate",p:"verb",d:"To reduce in amount, degree, or intensity; subside."},
+{w:"Aberration",p:"noun",d:"A departure from what is normal, usual, or expected."},
+{w:"Abjure",p:"verb",d:"To solemnly renounce a belief, cause, or claim."},
+{w:"Abrogate",p:"verb",d:"To repeal or do away with (a law, right, or formal agreement)."},
+{w:"Abscond",p:"verb",d:"To leave hurriedly and secretly, typically to escape from custody or avoid consequences."},
+{w:"Abstemious",p:"adj",d:"Not self-indulgent, especially when eating and drinking."},
+{w:"Abstruse",p:"adj",d:"Difficult to understand; obscure."},
+{w:"Accolade",p:"noun",d:"An award or privilege granted as a special honor."},
+{w:"Acerbic",p:"adj",d:"Sharp and forthright; (of a comment or style) critical and direct."},
+{w:"Acrimony",p:"noun",d:"Bitterness or ill feeling."},
+{w:"Admonish",p:"verb",d:"To warn or reprimand someone firmly."},
+{w:"Adulterate",p:"verb",d:"To make something poorer in quality by adding a substance."},
+{w:"Aesthetic",p:"adj",d:"Concerned with beauty or the appreciation of beauty."},
+{w:"Affable",p:"adj",d:"Friendly, good-natured, or easy to talk to."},
+{w:"Aggrandize",p:"verb",d:"To increase the power, status, or wealth of; to exaggerate."},
+{w:"Alacrity",p:"noun",d:"Brisk and cheerful readiness."},
+{w:"Alleviate",p:"verb",d:"To make (suffering, deficiency, or a problem) less severe."},
+{w:"Ambiguous",p:"adj",d:"Open to more than one interpretation; not having one obvious meaning."},
+{w:"Ambivalent",p:"adj",d:"Having mixed feelings or contradictory ideas about something."},
+{w:"Ameliorate",p:"verb",d:"To make (something bad or unsatisfactory) better."},
+{w:"Anachronism",p:"noun",d:"A thing belonging to a period other than that in which it exists."},
+{w:"Anomalous",p:"adj",d:"Deviating from what is standard, normal, or expected."},
+{w:"Antagonize",p:"verb",d:"To cause (someone) to become hostile."},
+{w:"Apathy",p:"noun",d:"Lack of interest, enthusiasm, or concern."},
+{w:"Approbation",p:"noun",d:"Approval or praise."},
+{w:"Arbitrary",p:"adj",d:"Based on random choice or personal whim, rather than reason or system."},
+{w:"Arcane",p:"adj",d:"Known only by a few people; mysterious."},
+{w:"Ardent",p:"adj",d:"Enthusiastic or passionate."},
+{w:"Arduous",p:"adj",d:"Involving or requiring strenuous effort; difficult and tiring."},
+{w:"Arrogant",p:"adj",d:"Having or revealing an exaggerated sense of one's own importance."},
+{w:"Articulate",p:"adj",d:"Having or showing the ability to speak fluently and coherently."},
+{w:"Ascetic",p:"adj",d:"Characterized by severe self-discipline and abstention from all forms of indulgence."},
+{w:"Assuage",p:"verb",d:"To make (an unpleasant feeling) less intense."},
+{w:"Astute",p:"adj",d:"Having an ability to accurately assess situations; shrewd."},
+{w:"Audacious",p:"adj",d:"Showing a willingness to take surprisingly bold risks."},
+{w:"Austere",p:"adj",d:"Severe or strict in manner, attitude, or appearance."},
+{w:"Avarice",p:"noun",d:"Extreme greed for wealth or material gain."},
+{w:"Aversion",p:"noun",d:"A strong dislike or disinclination."},
+{w:"Banal",p:"adj",d:"So lacking in originality as to be obvious and boring."},
+{w:"Belligerent",p:"adj",d:"Hostile and aggressive; ready to fight."},
+{w:"Bemoan",p:"verb",d:"To express discontent or sorrow over (something)."},
+{w:"Benign",p:"adj",d:"Gentle and kindly; (of a disease) not harmful in effect."},
+{w:"Bolster",p:"verb",d:"To support or strengthen; prop up."},
+{w:"Bombastic",p:"adj",d:"High-sounding but with little meaning; inflated."},
+{w:"Brevity",p:"noun",d:"Concise and exact use of words in writing or speech."},
+{w:"Burgeon",p:"verb",d:"To begin to grow or increase rapidly; flourish."},
+{w:"Cajole",p:"verb",d:"To persuade someone to do something by sustained coaxing or flattery."},
+{w:"Callous",p:"adj",d:"Showing or having an insensitive and cruel disregard for others."},
+{w:"Candid",p:"adj",d:"Truthful and straightforward; frank."},
+{w:"Capricious",p:"adj",d:"Given to sudden and unaccountable changes of mood."},
+{w:"Castigate",p:"verb",d:"To reprimand (someone) severely."},
+{w:"Caustic",p:"adj",d:"Sarcastic in a scathing and bitter way."},
+{w:"Censure",p:"verb",d:"To express severe disapproval of; formally criticize."},
+{w:"Chicanery",p:"noun",d:"The use of trickery to achieve a political or legal purpose."},
+{w:"Circumspect",p:"adj",d:"Wary and unwilling to take risks."},
+{w:"Clemency",p:"noun",d:"Mercy and leniency shown toward offenders."},
+{w:"Coalesce",p:"verb",d:"To come together to form one mass or whole."},
+{w:"Cogent",p:"adj",d:"Clear, logical, and convincing (of an argument)."},
+{w:"Cognizant",p:"adj",d:"Having knowledge or being aware of."},
+{w:"Complacent",p:"adj",d:"Showing smug or uncritical satisfaction with oneself or one's achievements."},
+{w:"Conciliate",p:"verb",d:"To stop someone being angry; to make peace with."},
+{w:"Condone",p:"verb",d:"To accept and allow (wrong behavior) to continue."},
+{w:"Confound",p:"verb",d:"To cause surprise or confusion in; to prove wrong."},
+{w:"Convoluted",p:"adj",d:"Extremely complex and difficult to follow."},
+{w:"Copious",p:"adj",d:"Abundant in supply or quantity."},
+{w:"Corroborate",p:"verb",d:"To confirm or give support to (a statement or theory)."},
+{w:"Credulous",p:"adj",d:"Having too great a readiness to believe things."},
+{w:"Culpable",p:"adj",d:"Deserving blame or censure; blameworthy."},
+{w:"Cursory",p:"adj",d:"Hasty and therefore not thorough or detailed."},
+{w:"Cynical",p:"adj",d:"Believing that people are motivated purely by self-interest."},
+{w:"Daunt",p:"verb",d:"To make (someone) feel intimidated or apprehensive."},
+{w:"Debacle",p:"noun",d:"A sudden disastrous collapse or defeat; a fiasco."},
+{w:"Decorum",p:"noun",d:"Behavior in keeping with good taste and propriety."},
+{w:"Defer",p:"verb",d:"To put off to a later time; to submit to another's wishes."},
+{w:"Deference",p:"noun",d:"Humble submission and respect."},
+{w:"Delineate",p:"verb",d:"To describe or portray (something) precisely."},
+{w:"Deluge",p:"noun",d:"A severe flood; an overwhelming amount."},
+{w:"Demagogue",p:"noun",d:"A political leader who seeks support by appealing to popular desires."},
+{w:"Demur",p:"verb",d:"To raise doubts or objections or show reluctance."},
+{w:"Denounce",p:"verb",d:"To publicly declare to be wrong or evil; to condemn."},
+{w:"Deride",p:"verb",d:"To express contempt for; ridicule."},
+{w:"Desiccate",p:"verb",d:"To remove the moisture from something; cause to dry out."},
+{w:"Diatribe",p:"noun",d:"A forceful and bitter verbal attack against something."},
+{w:"Diffident",p:"adj",d:"Modest or shy due to a lack of self-confidence."},
+{w:"Diligent",p:"adj",d:"Having or showing care and conscientiousness in one's work or duties."},
+{w:"Disabuse",p:"verb",d:"To persuade someone that an idea or belief is mistaken."},
+{w:"Discern",p:"verb",d:"To recognize or find out; to perceive clearly."},
+{w:"Discordant",p:"adj",d:"Not in harmony; disagreeing."},
+{w:"Discrepancy",p:"noun",d:"A lack of compatibility or similarity between two or more facts."},
+{w:"Disinterested",p:"adj",d:"Not influenced by considerations of personal advantage; impartial."},
+{w:"Disparate",p:"adj",d:"Essentially different in kind; not allowing comparison."},
+{w:"Dispassionate",p:"adj",d:"Not influenced by strong emotion; rational and impartial."},
+{w:"Dogmatic",p:"adj",d:"Inclined to lay down principles as incontrovertibly true."},
+{w:"Dubious",p:"adj",d:"Hesitating or doubting; not to be relied upon; suspect."},
+{w:"Eccentric",p:"adj",d:"Unconventional and slightly strange."},
+{w:"Eclectic",p:"adj",d:"Deriving ideas, style, or taste from a diverse range of sources."},
+{w:"Effrontery",p:"noun",d:"Insolent or impertinent behavior; audacity."},
+{w:"Egregious",p:"adj",d:"Outstandingly bad; shocking."},
+{w:"Elegy",p:"noun",d:"A poem of serious reflection, typically a lament for the dead."},
+{w:"Eloquence",p:"noun",d:"Fluent or persuasive speaking or writing."},
+{w:"Elusive",p:"adj",d:"Difficult to find, catch, or achieve."},
+{w:"Emulate",p:"verb",d:"To match or surpass (a person or achievement), typically by imitation."},
+{w:"Enervate",p:"verb",d:"To cause someone to feel drained of energy; weaken."},
+{w:"Ephemeral",p:"adj",d:"Lasting for a very short time."},
+{w:"Equivocal",p:"adj",d:"Open to more than one interpretation; ambiguous."},
+{w:"Erudite",p:"adj",d:"Having or showing great knowledge or learning."},
+{w:"Esoteric",p:"adj",d:"Intended for or understood by only a small number of people."},
+{w:"Euphemism",p:"noun",d:"A mild or indirect word used in place of one that might be offensive."},
+{w:"Exacerbate",p:"verb",d:"To make (a problem or bad situation) worse."},
+{w:"Exculpate",p:"verb",d:"To show or declare that someone is not guilty of wrongdoing."},
+{w:"Exigent",p:"adj",d:"Pressing; demanding."},
+{w:"Exonerate",p:"verb",d:"To officially absolve someone from blame or criminal charge."},
+{w:"Expedient",p:"adj",d:"Convenient and practical though possibly improper or immoral."},
+{w:"Extol",p:"verb",d:"To praise enthusiastically."},
+{w:"Extraneous",p:"adj",d:"Irrelevant or unrelated to the subject being dealt with."},
+{w:"Exuberant",p:"adj",d:"Filled with or characterized by a lively energy and excitement."},
+{w:"Facile",p:"adj",d:"Ignoring the true complexities of an issue; superficial."},
+{w:"Fallacious",p:"adj",d:"Based on a mistaken belief; misleading."},
+{w:"Fastidious",p:"adj",d:"Very attentive to and concerned about accuracy and detail."},
+{w:"Fervid",p:"adj",d:"Intensely enthusiastic or passionate."},
+{w:"Flippant",p:"adj",d:"Not showing a serious or respectful attitude."},
+{w:"Foment",p:"verb",d:"To instigate or stir up (an undesirable course of action)."},
+{w:"Frugal",p:"adj",d:"Sparing or economical with regard to money or food."},
+{w:"Furtive",p:"adj",d:"Attempting to avoid notice or attention, typically due to guilt."},
+{w:"Gainsay",p:"verb",d:"To deny or contradict (a fact or statement)."},
+{w:"Garrulous",p:"adj",d:"Excessively talkative, especially on trivial matters."},
+{w:"Gregarious",p:"adj",d:"Fond of company; sociable."},
+{w:"Guile",p:"noun",d:"Sly or cunning intelligence; deceit."},
+{w:"Gullible",p:"adj",d:"Easily persuaded to believe something; credulous."},
+{w:"Hackneyed",p:"adj",d:"(of a phrase or idea) lacking significance through having been overused."},
+{w:"Hamper",p:"verb",d:"To hinder or impede the movement or progress of."},
+{w:"Haughty",p:"adj",d:"Arrogantly superior and disdainful."},
+{w:"Hegemony",p:"noun",d:"Leadership or dominance, especially of one country or social group."},
+{w:"Heretical",p:"adj",d:"Believing in or practicing religious heresy; contrary to orthodox opinion."},
+{w:"Homogeneous",p:"adj",d:"Of the same kind; alike."},
+{w:"Hypocritical",p:"adj",d:"Behaving in a way that contradicts stated beliefs or feelings."},
+{w:"Iconoclast",p:"noun",d:"A person who attacks cherished beliefs or institutions."},
+{w:"Idiosyncratic",p:"adj",d:"Peculiar or individual; having strange habits."},
+{w:"Impetuous",p:"adj",d:"Acting or done quickly and without thought or care."},
+{w:"Implacable",p:"adj",d:"Unable to be appeased or appeased; unrelenting."},
+{w:"Implicit",p:"adj",d:"Suggested though not directly expressed."},
+{w:"Impugn",p:"verb",d:"To dispute the truth, validity, or honesty of."},
+{w:"Inchoate",p:"adj",d:"Just begun and so not fully formed or developed."},
+{w:"Incongruous",p:"adj",d:"Not in harmony or keeping with the surroundings or other aspects."},
+{w:"Indolent",p:"adj",d:"Wanting to avoid activity or exertion; lazy."},
+{w:"Ineffable",p:"adj",d:"Too great or extreme to be expressed in words."},
+{w:"Inimical",p:"adj",d:"Tending to obstruct or harm; unfriendly; hostile."},
+{w:"Innocuous",p:"adj",d:"Not harmful or offensive; harmless."},
+{w:"Insipid",p:"adj",d:"Lacking vigor or interest; dull."},
+{w:"Insular",p:"adj",d:"Ignorant of or uninterested in cultures outside one's own."},
+{w:"Intractable",p:"adj",d:"Hard to control or deal with."},
+{w:"Intransigent",p:"adj",d:"Unwilling or refusing to change one's views or to agree."},
+{w:"Inundate",p:"verb",d:"To overwhelm (someone) with things or people to be dealt with."},
+{w:"Invective",p:"noun",d:"Insulting, abusive, or highly critical language."},
+{w:"Laconic",p:"adj",d:"(of a person, speech, or style) using very few words."},
+{w:"Languid",p:"adj",d:"(of a person) having or showing a disinclination for physical exertion."},
+{w:"Lethargic",p:"adj",d:"Affected by lethargy; sluggish and apathetic."},
+{w:"Loquacious",p:"adj",d:"Tending to talk a great deal; talkative."},
+{w:"Lucid",p:"adj",d:"Expressed clearly; easy to understand."},
+{w:"Lugubrious",p:"adj",d:"Looking or sounding sad and dismal."},
+{w:"Malleable",p:"adj",d:"Able to be hammered or shaped without breaking; easily influenced."},
+{w:"Mendacious",p:"adj",d:"Not telling the truth; lying."},
+{w:"Meticulous",p:"adj",d:"Showing great attention to detail; very careful."},
+{w:"Misanthrope",p:"noun",d:"A person who dislikes humankind and avoids human society."},
+{w:"Mitigate",p:"verb",d:"To make less severe, serious, or painful."},
+{w:"Mollify",p:"verb",d:"To appease the anger or anxiety of (someone)."},
+{w:"Mundane",p:"adj",d:"Lacking interest or excitement; dull."},
+{w:"Nefarious",p:"adj",d:"Wicked or criminal."},
+{w:"Neophyte",p:"noun",d:"A person who is new to a subject, skill, or belief."},
+{w:"Nihilism",p:"noun",d:"The rejection of all religious and moral principles, in the belief that life is meaningless."},
+{w:"Nominal",p:"adj",d:"Existing in name only; very small."},
+{w:"Nonchalant",p:"adj",d:"Feeling or appearing casually calm and relaxed."},
+{w:"Nuance",p:"noun",d:"A subtle difference in or shade of meaning, expression, or sound."},
+{w:"Obdurate",p:"adj",d:"Stubbornly refusing to change one's opinion or course of action."},
+{w:"Obsequious",p:"adj",d:"Obedient or attentive to an excessive or servile degree."},
+{w:"Obsolete",p:"adj",d:"No longer produced or used; out of date."},
+{w:"Obtuse",p:"adj",d:"Annoyingly insensitive or slow to understand."},
+{w:"Opaque",p:"adj",d:"Not able to be seen through; not transparent; not clear."},
+{w:"Ostentation",p:"noun",d:"Pretentious display, especially of wealth and luxury."},
+{w:"Ostracize",p:"verb",d:"To exclude from a society or group."},
+{w:"Painstaking",p:"adj",d:"Done with or employing great care and thoroughness."},
+{w:"Paradox",p:"noun",d:"A seemingly absurd or self-contradictory statement or proposition."},
+{w:"Parsimonious",p:"adj",p:"adj",d:"Unwilling to spend money or use resources; stingy."},
+{w:"Pedantic",p:"adj",d:"Excessively concerned with minor details or rules."},
+{w:"Penchant",p:"noun",d:"A strong or habitual liking for something."},
+{w:"Perfidious",p:"adj",d:"Deceitful and untrustworthy."},
+{w:"Peripheral",p:"adj",d:"Of secondary or minor importance; marginal."},
+{w:"Pervasive",p:"adj",d:"Spreading widely throughout an area or a group of people."},
+{w:"Philanthropic",p:"adj",d:"Seeking to promote the welfare of others."},
+{w:"Placate",p:"verb",d:"To make (someone) less angry or hostile."},
+{w:"Platitude",p:"noun",d:"A remark or statement that is used too often to be interesting."},
+{w:"Plausible",p:"adj",d:"Seeming reasonable or probable."},
+{w:"Polemical",p:"adj",d:"Of or involving strongly critical or disputatious writing or speech."},
+{w:"Pragmatic",p:"adj",d:"Dealing with things sensibly and realistically."},
+{w:"Precipitate",p:"verb",d:"To cause (an event) to happen suddenly or prematurely."},
+{w:"Preclude",p:"verb",d:"To prevent from happening; make impossible."},
+{w:"Precocious",p:"adj",d:"Having developed certain abilities at an earlier age than usual."},
+{w:"Pretentious",p:"adj",d:"Attempting to impress by affecting greater importance or merit."},
+{w:"Prevaricate",p:"verb",d:"To speak or act in an evasive way."},
+{w:"Prodigal",p:"adj",d:"Spending money or resources freely and recklessly."},
+{w:"Prodigious",p:"adj",d:"Remarkably great in extent, size, or degree."},
+{w:"Proliferate",p:"verb",d:"To increase rapidly in number; multiply."},
+{w:"Propitious",p:"adj",d:"Giving or indicating a good chance of success; favorable."},
+{w:"Propriety",p:"noun",d:"The state or quality of conforming to accepted standards of behavior."},
+{w:"Prudent",p:"adj",d:"Acting with or showing care and thought for the future."},
+{w:"Punctilious",p:"adj",d:"Showing great attention to detail or correct behavior."},
+{w:"Querulous",p:"adj",d:"Complaining in a petulant or whining manner."},
+{w:"Quiescent",p:"adj",d:"In a state or period of inactivity or dormancy."},
+{w:"Rarefy",p:"verb",d:"To make or become thin, less dense, or refined."},
+{w:"Recalcitrant",p:"adj",d:"Having an obstinately uncooperative attitude."},
+{w:"Reclusive",p:"adj",d:"Avoiding the company of other people; solitary."},
+{w:"Reticent",p:"adj",d:"Not revealing one's thoughts or feelings readily."},
+{w:"Rhetoric",p:"noun",d:"Persuasive language; the art of effective or persuasive speaking."},
+{w:"Rigorous",p:"adj",d:"Extremely thorough and careful."},
+{w:"Sanguine",p:"adj",d:"Optimistic or positive, especially in a bad situation."},
+{w:"Satire",p:"noun",d:"The use of humor or exaggeration to criticize people's stupidity."},
+{w:"Scrupulous",p:"adj",d:"Diligent, thorough, and extremely attentive to details."},
+{w:"Skeptical",p:"adj",d:"Not easily convinced; having doubts or reservations."},
+{w:"Soporific",p:"adj",d:"Tending to induce drowsiness or sleep."},
+{w:"Specious",p:"adj",d:"Superficially plausible, but actually wrong."},
+{w:"Spurious",p:"adj",d:"Not being what it purports to be; false or fake."},
+{w:"Stigma",p:"noun",d:"A mark of disgrace associated with a particular circumstance."},
+{w:"Stoic",p:"adj",d:"Enduring pain and hardship without showing feelings or complaining."},
+{w:"Stolid",p:"adj",d:"Calm, dependable, and showing little emotion or animation."},
+{w:"Stymie",p:"verb",d:"To prevent or hinder the progress of."},
+{w:"Subjugate",p:"verb",d:"To bring under domination or control, especially by conquest."},
+{w:"Subtle",p:"adj",d:"So delicate or precise as to be difficult to analyze or describe."},
+{w:"Succinct",p:"adj",d:"Briefly and clearly expressed."},
+{w:"Supercilious",p:"adj",d:"Behaving as if one is superior to others; condescending."},
+{w:"Superficial",p:"adj",d:"Existing or occurring at or on the surface; not thorough."},
+{w:"Superfluous",p:"adj",d:"Unnecessary, especially through being more than enough."},
+{w:"Suppress",p:"verb",d:"To forcibly put an end to; to prevent from being expressed."},
+{w:"Taciturn",p:"adj",d:"(of a person) reserved or uncommunicative in speech."},
+{w:"Tangential",p:"adj",d:"Diverging from a previous course or line; barely relevant."},
+{w:"Tenacious",p:"adj",d:"Tending to keep a firm hold of something; persistent."},
+{w:"Tendentious",p:"adj",d:"Promoting a particular cause or point of view; biased."},
+{w:"Terse",p:"adj",d:"Sparing in the use of words; abrupt."},
+{w:"Timorous",p:"adj",d:"Showing or suffering from nervousness, fear, or a lack of confidence."},
+{w:"Torpid",p:"adj",d:"Mentally or physically inactive; lethargic."},
+{w:"Tractable",p:"adj",d:"(of a person) easy to control or influence."},
+{w:"Transient",p:"adj",d:"Lasting only for a short time; impermanent."},
+{w:"Trite",p:"adj",d:"(of a remark or idea) lacking originality; overused."},
+{w:"Truculent",p:"adj",d:"Eager or quick to argue or fight; aggressively defiant."},
+{w:"Turpitude",p:"noun",d:"Wickedness and moral depravity."},
+{w:"Ubiquitous",p:"adj",d:"Present, appearing, or found everywhere."},
+{w:"Unadulterated",p:"adj",d:"Not mixed or diluted with any different substance; complete."},
+{w:"Unequivocal",p:"adj",d:"Leaving no doubt; unambiguous."},
+{w:"Untenable",p:"adj",d:"(especially of a position or view) not able to be maintained."},
+{w:"Vacillate",p:"verb",d:"To alternate or waver between different opinions or actions."},
+{w:"Venerate",p:"verb",d:"To regard with great respect; revere."},
+{w:"Veracity",p:"noun",d:"Conformity to facts; accuracy; habitual truthfulness."},
+{w:"Verbose",p:"adj",d:"Using or expressed in more words than are needed."},
+{w:"Vex",p:"verb",d:"To make (someone) feel annoyed, frustrated, or worried."},
+{w:"Vicarious",p:"adj",d:"Experienced in the imagination through the feelings of another."},
+{w:"Vicious",p:"adj",d:"Deliberately cruel or violent."},
+{w:"Vigilant",p:"adj",d:"Keeping careful watch for possible danger or difficulties."},
+{w:"Vilify",p:"verb",d:"To speak or write about in an abusively disparaging manner."},
+{w:"Vindicate",p:"verb",d:"To clear of blame or suspicion."},
+{w:"Vindictive",p:"adj",d:"Having or showing a strong or unreasoning desire for revenge."},
+{w:"Vitriolic",p:"adj",d:"Filled with bitter criticism or malice."},
+{w:"Volatile",p:"adj",d:"Liable to change rapidly and unpredictably, especially for the worse."},
+{w:"Zeal",p:"noun",d:"Great energy or enthusiasm in pursuit of a cause or objective."},
+{w:"Zealot",p:"noun",d:"A person who is fanatical and uncompromising in pursuit of ideals."},
+{w:"Zenith",p:"noun",d:"The time at which something is most powerful or successful."},
+{w:"Accolade",p:"noun",d:"An award or privilege granted as a special honor or as an acknowledgment of merit."},
+{w:"Acrimony",p:"noun",d:"Bitterness or ill feeling, especially in speech or manner."},
+{w:"Acquiesce",p:"verb",d:"To accept something reluctantly but without protest."},
+{w:"Adroit",p:"adj",d:"Clever or skillful in using the hands or mind."},
+{w:"Adulation",p:"noun",d:"Obsequious flattery; excessive admiration or praise."},
+{w:"Aesthetic",p:"noun",d:"A set of principles underlying the work of a particular artist."},
+{w:"Affluent",p:"adj",d:"Having a great deal of money; wealthy."},
+{w:"Affront",p:"noun",d:"An action or remark that causes outrage or offense."},
+{w:"Aggrieve",p:"verb",d:"To feel resentment at having been unfairly treated."},
+{w:"Agrarian",p:"adj",d:"Relating to cultivated land or the cultivation of land."},
+{w:"Aloof",p:"adj",d:"Not friendly or forthcoming; cool and distant."},
+{w:"Altruism",p:"noun",d:"The belief in or practice of disinterested and selfless concern for others."},
+{w:"Amalgam",p:"noun",d:"A mixture or blend."},
+{w:"Ambivalence",p:"noun",d:"The state of having mixed feelings or contradictory ideas about something."},
+{w:"Ameliorate",p:"verb",d:"To make (something bad or unsatisfactory) better; improve."},
+{w:"Amiable",p:"adj",d:"Having or displaying a friendly and pleasant manner."},
+{w:"Amicable",p:"adj",d:"Having a spirit of friendliness; without serious disagreement or rancor."},
+{w:"Anachronistic",p:"adj",d:"Belonging to a period other than that being portrayed; outdated."},
+{w:"Anarchic",p:"adj",d:"With no controlling rules or principles to give order."},
+{w:"Anecdote",p:"noun",d:"A short amusing or interesting story about a real incident or person."},
+{w:"Animus",p:"noun",d:"Hostility or ill feeling."},
+{w:"Annotate",p:"verb",d:"To add notes to (a text or diagram) giving explanation or comment."},
+{w:"Anomaly",p:"noun",d:"Something that deviates from what is standard, normal, or expected."},
+{w:"Antagonist",p:"noun",d:"A person who actively opposes or is hostile to someone; an adversary."},
+{w:"Antipathy",p:"noun",d:"A deep-seated feeling of dislike; aversion."},
+{w:"Apocryphal",p:"adj",d:"Of doubtful authenticity, although widely circulated as being true."},
+{w:"Appease",p:"verb",d:"To pacify or placate (someone) by acceding to their demands."},
+{w:"Apprehensive",p:"adj",d:"Anxious or fearful that something bad will happen."},
+{w:"Archaic",p:"adj",d:"Very old or old-fashioned."},
+{w:"Ardor",p:"noun",d:"Enthusiasm or passion."},
+{w:"Arid",p:"adj",d:"(of land) having little or no rain; too dry to support vegetation."},
+{w:"Arrogance",p:"noun",d:"The quality of being arrogant; having exaggerated self-importance."},
+{w:"Articulate",p:"verb",d:"To express (an idea or feeling) fluently and coherently."},
+{w:"Aspersion",p:"noun",d:"An attack on the reputation or integrity of someone."},
+{w:"Assiduous",p:"adj",d:"Showing great care and perseverance."},
+{w:"Assuage",p:"verb",d:"To make (an unpleasant feeling) less intense; satisfy (a desire)."},
+{w:"Attenuate",p:"verb",d:"To reduce the force, effect, or value of."},
+{w:"Auspicious",p:"adj",d:"Conducive to success; favorable."},
+{w:"Autocratic",p:"adj",d:"Taking no account of other people's wishes; domineering."},
+{w:"Avarice",p:"noun",d:"Extreme greed for wealth or material gain."},
+{w:"Aversion",p:"noun",d:"A strong dislike or disinclination."},
+{w:"Avid",p:"adj",d:"Having an eager desire for something; very enthusiastic."},
+{w:"Beguile",p:"verb",d:"To charm or enchant (someone), sometimes in a deceptive way."},
+{w:"Belabor",p:"verb",d:"To argue or elaborate (a subject) in excessive detail."},
+{w:"Beleaguer",p:"verb",d:"To put in a difficult situation."},
+{w:"Bellicose",p:"adj",d:"Demonstrating aggression and willingness to fight."},
+{w:"Bemuse",p:"verb",d:"To cause to be confused or puzzled."},
+{w:"Benevolent",p:"adj",d:"Well meaning and kindly."},
+{w:"Bequeath",p:"verb",d:"To leave (a personal estate or one's body) to a person in a will."},
+{w:"Beseech",p:"verb",d:"To ask urgently or fervently to do something."},
+{w:"Blight",p:"noun",d:"A thing that has a severely bad effect on something."},
+{w:"Blithe",p:"adj",d:"Showing a casual and cheerful indifference considered to be callous."},
+{w:"Boisterous",p:"adj",d:"Noisy, energetic, and cheerful."},
+{w:"Brazen",p:"adj",d:"Bold and without shame."},
+{w:"Brusque",p:"adj",d:"Abrupt or offhand in manner or speech."},
+{w:"Bucolic",p:"adj",d:"Relating to the pleasant aspects of the countryside and country life."},
+{w:"Callow",p:"adj",d:"Inexperienced and immature."},
+{w:"Candor",p:"noun",d:"The quality of being open and honest in expression; frankness."},
+{w:"Capitulate",p:"verb",d:"To cease to resist an opponent or an unwelcome demand; yield."},
+{w:"Caricature",p:"noun",d:"A picture or description that exaggerates for comic or grotesque effect."},
+{w:"Cavalier",p:"adj",d:"Showing a lack of proper concern."},
+{w:"Cerebral",p:"adj",d:"Of or relating to the brain or intellect."},
+{w:"Chide",p:"verb",d:"To scold or rebuke."},
+{w:"Circumscribe",p:"verb",d:"To restrict (something) within limits."},
+{w:"Circumvent",p:"verb",d:"To find a way around (an obstacle)."},
+{w:"Clairvoyant",p:"adj",d:"Claiming to have supernatural ability to perceive future events."},
+{w:"Clamor",p:"noun",d:"A loud and confused noise; a strongly expressed protest."},
+{w:"Clandestine",p:"adj",d:"Kept secret or done secretively."},
+{w:"Clout",p:"noun",d:"Influence or power, especially in politics or business."},
+{w:"Coerce",p:"verb",d:"To persuade (an unwilling person) to do something by using force."},
+{w:"Cogitate",p:"verb",d:"To think deeply about something; meditate."},
+{w:"Commensurate",p:"adj",d:"Corresponding in size or degree; in proportion."},
+{w:"Commiserate",p:"verb",d:"To express or feel sympathy or pity; sympathize."},
+{w:"Compunction",p:"noun",d:"A feeling of guilt or moral scruple that prevents one from doing something."},
+{w:"Concede",p:"verb",d:"To admit that something is true after first denying it."},
+{w:"Conciliatory",p:"adj",d:"Intended or likely to placate or pacify."},
+{w:"Condescend",p:"verb",d:"To act in a way that implies superiority; be patronizing."},
+{w:"Confluence",p:"noun",d:"The junction of two rivers; coming together of people or things."},
+{w:"Conscientious",p:"adj",d:"Wishing to do what is right; painstaking and careful."},
+{w:"Contrite",p:"adj",d:"Feeling or expressing remorse at the recognition of past wrongdoing."},
+{w:"Controversial",p:"adj",d:"Giving rise to controversy; arguable."},
+{w:"Corrosive",p:"adj",d:"Tending to cause corrosion; destructive."},
+{w:"Craven",p:"adj",d:"Contemptibly lacking in courage; cowardly."},
+{w:"Credible",p:"adj",d:"Able to be believed; convincing."},
+{w:"Cryptic",p:"adj",d:"Having a meaning that is mysterious or obscure."},
+{w:"Cupidity",p:"noun",d:"Greed for money or possessions."},
+{w:"Dearth",p:"noun",d:"A scarcity or lack of something."},
+{w:"Decadent",p:"adj",d:"Characterized by or reflecting a state of moral or cultural decline."},
+{w:"Decisive",p:"adj",d:"Settling an issue; producing a definite result."},
+{w:"Deference",p:"noun",d:"Polite submission and respect."},
+{w:"Deflect",p:"verb",d:"To cause (something) to change direction; to avert."},
+{w:"Defunct",p:"adj",d:"No longer existing or functioning."},
+{w:"Deliberate",p:"adj",d:"Done consciously and intentionally."},
+{w:"Demeanor",p:"noun",d:"Outward behavior or bearing."},
+{w:"Denounce",p:"verb",d:"To publicly declare to be wrong; to inform against."},
+{w:"Despondent",p:"adj",d:"In low spirits from loss of hope or courage."},
+{w:"Destitute",p:"adj",d:"Without the basic necessities of life; extremely poor."},
+{w:"Deter",p:"verb",d:"To discourage (someone) from doing something through doubt or fear."},
+{w:"Devious",p:"adj",d:"Showing a skillful use of underhanded tactics."},
+{w:"Dexterous",p:"adj",d:"Showing or having skill, especially with the hands."},
+{w:"Didactic",p:"adj",d:"Intended to teach; in the manner of a teacher."},
+{w:"Diffuse",p:"verb",d:"To spread over a wide area or between many people."},
+{w:"Digress",p:"verb",d:"To leave the main subject temporarily in speech or writing."},
+{w:"Discomfit",p:"verb",d:"To make (someone) feel uneasy or embarrassed."},
+{w:"Disconcert",p:"verb",d:"To disturb the composure of; to unsettle."},
+{w:"Discourse",p:"noun",d:"Written or spoken communication or debate."},
+{w:"Disdain",p:"noun",d:"The feeling that someone or something is unworthy of one's consideration."},
+{w:"Dismantle",p:"verb",d:"To take to pieces; to demolish."},
+{w:"Dismissive",p:"adj",d:"Feeling or showing that something is unworthy of consideration."},
+{w:"Disparage",p:"verb",d:"To regard or represent as being of little worth."},
+{w:"Dispute",p:"verb",d:"To argue about (something); to question the truth of."},
+{w:"Disrupt",p:"verb",d:"To interrupt (an event, activity, or process) by causing a disturbance."},
+{w:"Dissemble",p:"verb",d:"To conceal one's true motives or feelings under a false appearance."},
+{w:"Disseminate",p:"verb",d:"To spread (something, especially information) widely."},
+{w:"Dissonance",p:"noun",d:"Lack of harmony among musical notes; tension or conflict."},
+{w:"Docile",p:"adj",d:"Ready to accept control or instruction; submissive."},
+{w:"Dogma",p:"noun",d:"A principle or set of principles laid down by an authority as true."},
+{w:"Dormant",p:"adj",d:"Having normal physical functions suspended; temporarily inactive."},
+{w:"Duplicity",p:"noun",d:"Deceitfulness; double-dealing."},
+{w:"Ebullient",p:"adj",d:"Cheerful and full of energy."},
+{w:"Edify",p:"verb",d:"To instruct or improve (someone) morally or intellectually."},
+{w:"Efficacious",p:"adj",d:"Successful in producing a desired or intended result."},
+{w:"Effusive",p:"adj",d:"Expressing feelings of gratitude in an unrestrained manner."},
+{w:"Egalitarian",p:"adj",d:"Relating to or believing in the principle that all people are equal."},
+{w:"Elicit",p:"verb",d:"To evoke or draw out (a response, answer, or fact)."},
+{w:"Emaciated",p:"adj",d:"Abnormally thin or weak, especially because of illness."},
+{w:"Embellish",p:"verb",d:"To make more attractive by adding decorative details."},
+{w:"Eminent",p:"adj",d:"Famous and respected within a particular sphere."},
+{w:"Empathy",p:"noun",d:"The ability to understand and share the feelings of another."},
+{w:"Empirical",p:"adj",d:"Based on, concerned with, or verifiable by observation or experience."},
+{w:"Encumber",p:"verb",d:"To restrict or burden (someone or something) in such a way that free action is difficult."},
+{w:"Endorse",p:"verb",d:"To declare one's public approval of."},
+{w:"Enervation",p:"noun",d:"The loss of vitality and strength."},
+{w:"Enigmatic",p:"adj",d:"Difficult to interpret or understand; mysterious."},
+{w:"Enmity",p:"noun",d:"The state or feeling of being actively opposed to someone; hostility."},
+{w:"Enumerate",p:"verb",d:"To mention (a number of things) one by one."},
+{w:"Epistemology",p:"noun",d:"The branch of philosophy concerned with the theory of knowledge."},
+{w:"Equanimity",p:"noun",d:"Mental calmness, composure, especially in difficult situations."},
+{w:"Eradicate",p:"verb",d:"To destroy completely; put an end to."},
+{w:"Erratic",p:"adj",d:"Not even or regular in pattern or movement; unpredictable."},
+{w:"Evanescent",p:"adj",d:"Soon passing out of sight, memory, or existence; quickly fading."},
+{w:"Exactitude",p:"noun",d:"The quality of being exact; precision."},
+{w:"Exalt",p:"verb",d:"To hold (someone or something) in very high regard; praise highly."},
+{w:"Exemplary",p:"adj",d:"Representing the best of its kind; serving as a model."},
+{w:"Exhaustive",p:"adj",d:"Examining, including, or considering all elements; thorough."},
+{w:"Explicit",p:"adj",d:"Stated clearly and in detail, leaving no room for confusion."},
+{w:"Exposition",p:"noun",d:"A comprehensive description and explanation of a plan or theory."},
+{w:"Extenuate",p:"verb",d:"To make (guilt or an offense) seem less serious."},
+{w:"Extricate",p:"verb",d:"To free (someone or something) from a constraint or difficulty."},
+{w:"Fabricate",p:"verb",d:"To invent (something) in order to deceive."},
+{w:"Fallow",p:"adj",d:"(of farmland) not sown or planted; left unused."},
+{w:"Fanatical",p:"adj",d:"Filled with excessive and single-minded zeal."},
+{w:"Fastidious",p:"adj",d:"Very attentive to and concerned about accuracy and detail."},
+{w:"Feckless",p:"adj",d:"Lacking initiative or strength of character; irresponsible."},
+{w:"Felicitous",p:"adj",d:"Well chosen or suited to the circumstances; pleasing."},
+{w:"Fervency",p:"noun",d:"The quality of being sincere and passionate."},
+{w:"Fervor",p:"noun",d:"Intense and passionate feeling."},
+{w:"Flaccid",p:"adj",d:"Soft and hanging loosely or limply; lacking vigor."},
+{w:"Flagrant",p:"adj",d:"(of something considered wrong) conspicuously or obviously offensive."},
+{w:"Flout",p:"verb",d:"To openly disregard (a rule, law, or convention)."},
+{w:"Fortuitous",p:"adj",d:"Happening by accident or chance rather than design."},
+{w:"Fraught",p:"adj",d:"Causing or affected by anxiety or stress."},
+{w:"Fulsome",p:"adj",d:"Complimentary or flattering to an excessive degree."},
+{w:"Fundamental",p:"adj",d:"Forming a necessary base or core; of central importance."},
+{w:"Garish",p:"adj",d:"Obtrusively bright and showy; lurid."},
+{w:"Gauche",p:"adj",d:"Lacking ease or grace; unsophisticated and socially awkward."},
+{w:"Germane",p:"adj",d:"Relevant to a subject under consideration."},
+{w:"Gluttony",p:"noun",d:"Habitual greed or excess in eating."},
+{w:"Gratuitous",p:"adj",d:"Uncalled for; lacking good reason; unwarranted."},
+{w:"Gregarious",p:"adj",d:"Fond of company; sociable."},
+{w:"Grievous",p:"adj",d:"(of something bad) very severe or serious."},
+{w:"Harangue",p:"noun",d:"A lengthy and aggressive speech."},
+{w:"Hedonism",p:"noun",d:"The pursuit of pleasure; sensual self-indulgence."},
+{w:"Heresy",p:"noun",d:"Belief or opinion contrary to orthodox religious doctrine."},
+{w:"Histrionic",p:"adj",d:"Overly dramatic or theatrical."},
+{w:"Hubris",p:"noun",d:"Excessive pride or self-confidence."},
+{w:"Iconoclasm",p:"noun",d:"The action of attacking or asserting the falsity of cherished beliefs."},
+{w:"Ideology",p:"noun",d:"A system of ideas and ideals forming the basis of economic or political theory."},
+{w:"Ignoble",p:"adj",d:"Not honorable in character or purpose."},
+{w:"Ignominy",p:"noun",d:"Public shame or disgrace."},
+{w:"Immutable",p:"adj",d:"Unchanging over time or unable to be changed."},
+{w:"Impartial",p:"adj",d:"Treating all rivals or disputants equally; fair and just."},
+{w:"Impede",p:"verb",d:"To delay or prevent (someone or something) by obstruction."},
+{w:"Impenitent",p:"adj",d:"Not feeling shame or regret about one's actions; unrepentant."},
+{w:"Imperious",p:"adj",d:"Assuming power or authority without justification; arrogant."},
+{w:"Impervious",p:"adj",d:"Not allowing fluid to pass through; unable to be affected."},
+{w:"Implicate",p:"verb",d:"To show (someone) to be involved in a crime; to imply."},
+{w:"Impose",p:"verb",d:"To force (something unwelcome or unfamiliar) to be accepted."},
+{w:"Impotent",p:"adj",d:"Unable to take effective action; helpless or powerless."},
+{w:"Impudent",p:"adj",d:"Not showing due respect for another person; impertinent."},
+{w:"Impunity",p:"noun",d:"Exemption from punishment or freedom from the injurious consequences of an action."},
+{w:"Inarticulate",p:"adj",d:"Unable to express one's ideas or feelings clearly."},
+{w:"Incisive",p:"adj",d:"Intelligently analytical and clear-thinking."},
+{w:"Incoherent",p:"adj",d:"(of spoken or written language) expressed in an incomprehensible way."},
+{w:"Incorrigible",p:"adj",d:"Not able to be corrected, improved, or reformed."},
+{w:"Indignant",p:"adj",d:"Feeling or showing anger because of something unjust or unworthy."},
+{w:"Indiscriminate",p:"adj",d:"Done at random or without careful judgment."},
+{w:"Inevitable",p:"adj",d:"Certain to happen; unavoidable."},
+{w:"Inextricable",p:"adj",d:"Impossible to disentangle or separate."},
+{w:"Inexorable",p:"adj",d:"Impossible to stop or prevent."},
+{w:"Infallible",p:"adj",d:"Incapable of making mistakes or being wrong."},
+{w:"Infer",p:"verb",d:"To deduce or conclude (information) from evidence."},
+{w:"Insidious",p:"adj",d:"Proceeding in a gradual, subtle way, but with harmful effects."},
+{w:"Instigate",p:"verb",d:"To bring about or initiate (an action or event)."},
+{w:"Intrepid",p:"adj",d:"Fearless; adventurous."},
+{w:"Invective",p:"noun",d:"Insulting, abusive, or highly critical language."},
+{w:"Irascible",p:"adj",d:"Having or showing a tendency to be easily angered."},
+{w:"Ironic",p:"adj",d:"Happening in a way contrary to what is expected."},
+{w:"Irreverent",p:"adj",d:"Showing a lack of respect for people or things."},
+{w:"Itinerant",p:"adj",d:"Traveling from place to place."},
+{w:"Jocular",p:"adj",d:"Fond of or characterized by joking; playful."},
+{w:"Judicious",p:"adj",d:"Having, showing, or done with good judgment."},
+{w:"Juxtapose",p:"verb",d:"To place or deal with close together for contrasting effect."},
+{w:"Kindle",p:"verb",d:"To light or set on fire; to arouse or inspire (an emotion)."},
+{w:"Lambaste",p:"verb",d:"To criticize (someone or something) harshly."},
+{w:"Languid",p:"adj",d:"(of a person, manner, or gesture) displaying no vigor."},
+{w:"Laud",p:"verb",d:"To praise (a person or their achievements) highly."},
+{w:"Lavish",p:"adj",d:"Sumptuously rich, elaborate, or luxurious."},
+{w:"Lax",p:"adj",d:"Not sufficiently strict, severe, or careful."},
+{w:"Levity",p:"noun",d:"The treatment of a serious matter with humor."},
+{w:"Litigious",p:"adj",d:"Concerned with lawsuits or litigation; excessively inclined to sue."},
+{w:"Lucrative",p:"adj",d:"Producing a great deal of profit."},
+{w:"Ludicrous",p:"adj",d:"So foolish, unreasonable, or out of place as to be amusing."},
+{w:"Magnanimous",p:"adj",d:"Very generous or forgiving, especially toward a rival."},
+{w:"Malfeasance",p:"noun",d:"Wrongdoing, especially by a public official."},
+{w:"Malicious",p:"adj",d:"Characterized by malice; intending to do harm."},
+{w:"Malignant",p:"adj",d:"Evil in nature or effect; harmful; (of a tumor) cancerous."},
+{w:"Manipulative",p:"adj",d:"Characterized by unscrupulous control of a situation for one's advantage."},
+{w:"Maverick",p:"noun",d:"An independent-minded person who does not follow a group."},
+{w:"Mawkish",p:"adj",d:"Sentimental in a feeble or sickly way."},
+{w:"Melancholy",p:"noun",d:"A feeling of pensive sadness, typically with no obvious cause."},
+{w:"Mercenary",p:"adj",d:"Primarily concerned with making money at the expense of ethics."},
+{w:"Mercurial",p:"adj",d:"Subject to sudden or unpredictable changes of mood."},
+{w:"Meritocracy",p:"noun",d:"A system where advancement is based on individual ability."},
+{w:"Metamorphosis",p:"noun",d:"A change of the form or nature of a thing into a different form."},
+{w:"Metaphor",p:"noun",d:"A figure of speech in which a word is applied to something it does not literally denote."},
+{w:"Meticulous",p:"adj",d:"Showing great attention to detail or correctness."},
+{w:"Militant",p:"adj",d:"Combative and aggressive in support of a cause."},
+{w:"Misgiving",p:"noun",d:"A feeling of doubt or apprehension about the outcome of something."},
+{w:"Misnomer",p:"noun",d:"A wrong or inaccurate name or designation."},
+{w:"Moderate",p:"adj",d:"Average in amount, intensity, quality, or degree."},
+{w:"Mollify",p:"verb",d:"To appease the anger or anxiety of (someone)."},
+{w:"Morose",p:"adj",d:"Sullen and ill-tempered."},
+{w:"Moribund",p:"adj",d:"(of a person) at the point of death; in terminal decline."},
+{w:"Motley",p:"adj",d:"Incongruously varied in appearance or character; disparate."},
+{w:"Myriad",p:"adj",d:"Countless or extremely great in number."},
+{w:"Nascent",p:"adj",d:"(especially of a process or organization) just coming into existence."},
+{w:"Nebulous",p:"adj",d:"In the form of a cloud; vague; not clear."},
+{w:"Negligent",p:"adj",d:"Failing to take proper care in doing something."},
+{w:"Neologism",p:"noun",d:"A newly coined word or expression."},
+{w:"Nepotism",p:"noun",d:"The practice of favoritism toward relatives in bestowing positions."},
+{w:"Neutralize",p:"verb",d:"To render (something) ineffective or harmless by applying a countermeasure."},
+{w:"Nonplussed",p:"adj",d:"Surprised and confused so much that one is unsure how to react."},
+{w:"Nostalgic",p:"adj",d:"Feeling a sentimental longing for the past."},
+{w:"Notorious",p:"adj",d:"Famous or well-known, typically for some bad quality."},
+{w:"Noxious",p:"adj",d:"Harmful, poisonous, or very unpleasant."},
+{w:"Obfuscate",p:"verb",d:"To make unclear or obscure; to confuse."},
+{w:"Oblique",p:"adj",d:"Neither parallel nor at a right angle; not explicit."},
+{w:"Oblivious",p:"adj",d:"Not aware of or concerned about what is happening around one."},
+{w:"Obsequious",p:"adj",d:"Obedient or attentive to an excessive degree; fawning."},
+{w:"Obstinate",p:"adj",d:"Stubbornly refusing to change one's opinion; difficult to control."},
+{w:"Obviate",p:"verb",d:"To remove (a need or difficulty); to prevent."},
+{w:"Ominous",p:"adj",d:"Giving the impression that something bad is going to happen."},
+{w:"Opportunistic",p:"adj",d:"Exploiting chances offered by immediate circumstances."},
+{w:"Oppressive",p:"adj",d:"Inflicting harsh and authoritarian treatment."},
+{w:"Opulent",p:"adj",d:"Ostentatiously rich and luxurious."},
+{w:"Ornate",p:"adj",d:"Elaborately adorned or highly decorated."},
+{w:"Orthodox",p:"adj",d:"Following or conforming to the traditional or generally accepted rules."},
+{w:"Overture",p:"noun",d:"An introduction to something more substantial; an approach."},
+{w:"Pacifist",p:"noun",d:"A person who believes that war and violence are unjustifiable."},
+{w:"Palpable",p:"adj",d:"(of a feeling or atmosphere) so intense as to be almost touched; perceptible."},
+{w:"Paradigm",p:"noun",d:"A typical example or pattern of something; a model."},
+{w:"Paragon",p:"noun",d:"A person or thing regarded as a perfect example of a quality."},
+{w:"Partisan",p:"adj",d:"Prejudiced in favor of a particular cause; biased."},
+{w:"Pathos",p:"noun",d:"A quality that evokes a feeling of pity or sadness."},
+{w:"Patronize",p:"verb",d:"To treat in a way that is apparently kind but betrays superiority."},
+{w:"Paucity",p:"noun",d:"The presence of something only in small or insufficient quantities; scarcity."},
+{w:"Penchant",p:"noun",d:"A strong or habitual liking for something or tendency to do it."},
+{w:"Penitent",p:"adj",d:"Feeling or showing sorrow and regret for having done wrong; repentant."},
+{w:"Pensive",p:"adj",d:"Engaged in, involving, or reflecting deep thought."},
+{w:"Perennial",p:"adj",d:"Lasting or existing for a long or apparently infinite time; enduring."},
+{w:"Perfunctory",p:"adj",d:"Carried out with minimum effort; superficial."},
+{w:"Perspicacious",p:"adj",d:"Having a ready insight; shrewd."},
+{w:"Pertinacious",p:"adj",d:"Holding firmly to an opinion; stubbornly persistent."},
+{w:"Perturb",p:"verb",d:"To make (someone) anxious or unsettled."},
+{w:"Pervade",p:"verb",d:"To be present and apparent throughout."},
+{w:"Pessimistic",p:"adj",d:"Tending to see the worst aspect of things; expecting the worst."},
+{w:"Petulant",p:"adj",d:"Childishly sulky or bad-tempered."},
+{w:"Philanthropy",p:"noun",d:"The desire to promote the welfare of others; generosity."},
+{w:"Pithy",p:"adj",d:"(of language) concise and forcefully expressive."},
+{w:"Placid",p:"adj",d:"Not easily upset or excited; calm and peaceful."},
+{w:"Platitude",p:"noun",d:"A remark or statement that is used too often to be interesting."},
+{w:"Plethora",p:"noun",d:"A large or excessive amount of something."},
+{w:"Poignant",p:"adj",d:"Evoking a keen sense of sadness or regret."},
+{w:"Polarize",p:"verb",d:"To cause (something) to acquire polarity; to divide into contrasting groups."},
+{w:"Pompous",p:"adj",d:"Affectedly grand, solemn, or self-important."},
+{w:"Ponderous",p:"adj",d:"Slow and clumsy because of great weight; dull."},
+{w:"Portend",p:"verb",d:"To be a sign or warning that (something important) is likely to happen."},
+{w:"Posterior",p:"adj",d:"Situated behind or at the back of something."},
+{w:"Potent",p:"adj",d:"Having great power, influence, or effect; strong."},
+{w:"Precarious",p:"adj",d:"Not securely held; dependent on chance; uncertain."},
+{w:"Precipice",p:"noun",d:"A very steep rock face or cliff; a very dangerous situation."},
+{w:"Prejudice",p:"noun",d:"Preconceived opinion that is not based on reason or experience."},
+{w:"Presuppose",p:"verb",d:"To assume beforehand; take for granted."},
+{w:"Pretense",p:"noun",d:"An attempt to make something that is not the case appear true."},
+{w:"Prevalent",p:"adj",d:"Widespread in a particular area at a particular time."},
+{w:"Pristine",p:"adj",d:"In its original condition; unspoiled; immaculately clean."},
+{w:"Probity",p:"noun",d:"The quality of having strong moral principles; honesty."},
+{w:"Procrastinate",p:"verb",d:"To delay or postpone action."},
+{w:"Prodigal",p:"adj",d:"Spending money or resources freely and recklessly; wastefully extravagant."},
+{w:"Profligate",p:"adj",d:"Recklessly extravagant or wasteful in the use of resources."},
+{w:"Profound",p:"adj",d:"(of a person or statement) having or showing great knowledge."},
+{w:"Proliferate",p:"verb",d:"To increase rapidly in numbers; multiply."},
+{w:"Proponent",p:"noun",d:"A person who advocates for a theory, proposal, or course of action."},
+{w:"Prosperous",p:"adj",d:"Successful in material terms; flourishing financially."},
+{w:"Provocative",p:"adj",d:"Causing annoyance, anger, or another strong reaction."},
+{w:"Prude",p:"noun",d:"A person who is easily shocked by things considered immoral."},
+{w:"Pugnacious",p:"adj",d:"Eager or quick to argue, quarrel, or fight; aggressive."},
+{w:"Pusillanimous",p:"adj",d:"Showing a lack of courage or determination; timid."},
+{w:"Quandary",p:"noun",d:"A state of perplexity or uncertainty over what to do in a difficult situation."},
+{w:"Quixotic",p:"adj",d:"Exceedingly idealistic; unrealistic and impractical."},
+{w:"Rapacious",p:"adj",d:"Aggressively greedy or grasping."},
+{w:"Raucous",p:"adj",d:"Making or constituting a disturbingly harsh and loud noise."},
+{w:"Rebuke",p:"verb",d:"To express sharp disapproval or criticism of (someone)."},
+{w:"Recant",p:"verb",d:"To say that one no longer holds an opinion once held."},
+{w:"Reclusive",p:"adj",d:"Avoiding the company of other people."},
+{w:"Redundant",p:"adj",d:"Not or no longer needed; superfluous."},
+{w:"Refute",p:"verb",d:"To prove (a statement or theory) to be wrong or false."},
+{w:"Relegate",p:"verb",d:"To assign an inferior rank or position to."},
+{w:"Remonstrate",p:"verb",d:"To make a forcefully reproachful protest."},
+{w:"Reprehensible",p:"adj",d:"Deserving censure or condemnation."},
+{w:"Reproach",p:"verb",d:"To express disapproval of or disappointment in (someone) for a fault."},
+{w:"Repudiate",p:"verb",d:"To refuse to accept or be associated with."},
+{w:"Resilient",p:"adj",d:"Able to withstand or recover quickly from difficult conditions."},
+{w:"Resolute",p:"adj",d:"Admirably purposeful, determined, and unwavering."},
+{w:"Reticent",p:"adj",d:"Not revealing one's thoughts or feelings readily; reserved."},
+{w:"Revere",p:"verb",d:"To feel deep respect or admiration for (something)."},
+{w:"Rhetoric",p:"noun",d:"The art of effective or persuasive speaking or writing."},
+{w:"Sanctimonious",p:"adj",d:"Making a show of being morally superior to other people."},
+{w:"Sardonic",p:"adj",d:"Grimly mocking or cynical."},
+{w:"Satirize",p:"verb",d:"To subject to satire; ridicule or mock."},
+{w:"Savant",p:"noun",d:"A learned person; one with exceptional aptitude in a particular area."},
+{w:"Scathing",p:"adj",d:"Witheringly scornful; severely critical."},
+{w:"Scrutinize",p:"verb",d:"To examine or inspect closely and thoroughly."},
+{w:"Serendipity",p:"noun",d:"The occurrence and development of events by chance in a happy way."},
+{w:"Servile",p:"adj",d:"Having or showing an excessive willingness to serve or please others."},
+{w:"Shrewd",p:"adj",d:"Having or showing sharp powers of judgment; astute."},
+{w:"Sinister",p:"adj",d:"Giving the impression that something harmful or evil is happening."},
+{w:"Slander",p:"noun",d:"The action of making false and damaging statements about someone."},
+{w:"Solace",p:"noun",d:"Comfort or consolation in a time of distress or sadness."},
+{w:"Solicitous",p:"adj",d:"Characterized by or showing interest or concern."},
+{w:"Somnolent",p:"adj",d:"Sleepy; drowsy; inducing sleep."},
+{w:"Sophistry",p:"noun",d:"The use of clever but false arguments to deceive people."},
+{w:"Spurious",p:"adj",d:"Not being what it purports to be; false or fake."},
+{w:"Stagnant",p:"adj",d:"Showing no activity; dull and sluggish."},
+{w:"Steadfast",p:"adj",d:"Resolutely or dutifully firm and unwavering."},
+{w:"Stigmatize",p:"verb",d:"To describe or regard as worthy of disgrace."},
+{w:"Strident",p:"adj",d:"Loud and harsh; presenting a point of view in an excessively forceful way."},
+{w:"Subversive",p:"adj",d:"Seeking or intended to undermine power or authority."},
+{w:"Succinct",p:"adj",d:"(especially of something written or spoken) briefly and clearly expressed."},
+{w:"Sumptuous",p:"adj",d:"Splendid and expensive-looking."},
+{w:"Supine",p:"adj",d:"Failing to act; passive; lying face upward."},
+{w:"Surreptitiousness",p:"noun",d:"The quality of acting without being noticed; stealth."},
+{w:"Sycophant",p:"noun",d:"A person who acts obsequiously toward someone important; a fawning flatterer."},
+{w:"Synthesis",p:"noun",d:"The combination of components to form a connected whole."},
+{w:"Tacit",p:"adj",d:"Understood or implied without being stated."},
+{w:"Tangible",p:"adj",d:"Perceptible by touch; clear and definite; real."},
+{w:"Tautology",p:"noun",d:"The saying of the same thing twice in different words."},
+{w:"Temperate",p:"adj",d:"Showing moderation or self-restraint."},
+{w:"Tenuous",p:"adj",d:"Very weak or slight."},
+{w:"Terse",p:"adj",d:"Sparing in the use of words; abrupt."},
+{w:"Timidity",p:"noun",d:"Lack of courage or confidence; shyness."},
+{w:"Toil",p:"verb",d:"To work extremely hard; to move slowly and with difficulty."},
+{w:"Torrid",p:"adj",d:"Full of difficulty; very hot; passionately intense."},
+{w:"Tractable",p:"adj",d:"(of a person or animal) easy to control or influence."},
+{w:"Traumatic",p:"adj",d:"Emotionally disturbing or distressing."},
+{w:"Travesty",p:"noun",d:"A false, absurd, or distorted representation of something."},
+{w:"Treacherous",p:"adj",d:"Guilty of or involving betrayal or deception."},
+{w:"Trenchant",p:"adj",d:"Vigorous or incisive in expression or style."},
+{w:"Trepidation",p:"noun",d:"A feeling of fear or agitation about something that may happen."},
+{w:"Turbulent",p:"adj",d:"Characterized by conflict, disorder, or confusion; not stable."},
+{w:"Ubiquity",p:"noun",d:"The fact of appearing everywhere or of being very widespread."},
+{w:"Umbrage",p:"noun",d:"Offense or annoyance."},
+{w:"Unprecedented",p:"adj",d:"Never done or known before."},
+{w:"Untenable",p:"adj",d:"(especially of a position or view) not able to be maintained."},
+{w:"Upbraid",p:"verb",d:"To find fault with (someone); scold."},
+{w:"Usurp",p:"verb",d:"To take (a position of power or importance) illegally or by force."},
+{w:"Vacuous",p:"adj",d:"Having or showing a lack of thought or intelligence; vacant."},
+{w:"Valiant",p:"adj",d:"Possessing or showing courage or determination."},
+{w:"Vapid",p:"adj",d:"Offering nothing that is stimulating or challenging; bland."},
+{w:"Vehement",p:"adj",d:"Showing strong feeling; forceful, passionate, or intense."},
+{w:"Venal",p:"adj",d:"Showing or motivated by susceptibility to bribery; corrupt."},
+{w:"Venerable",p:"adj",d:"Accorded a great deal of respect due to age, wisdom, or character."},
+{w:"Verbose",p:"adj",d:"Using or expressed in more words than are needed."},
+{w:"Vicissitude",p:"noun",d:"A change of circumstances or fortune; ups and downs."},
+{w:"Virulent",p:"adj",d:"(of a disease or poison) extremely severe or harmful; bitter."},
+{w:"Vitiate",p:"verb",d:"To spoil or impair the quality or efficiency of."},
+{w:"Vivacious",p:"adj",d:"Attractively lively and animated."},
+{w:"Vociferous",p:"adj",d:"Expressing opinions in a loud or forceful way."},
+{w:"Voracious",p:"adj",d:"Wanting or devouring great quantities of food; very eager."},
+{w:"Wanton",p:"adj",d:"(of a cruel or violent action) deliberate and unprovoked."},
+{w:"Wary",p:"adj",d:"Feeling or showing caution about possible dangers."},
+{w:"Whimsical",p:"adj",d:"Playfully quaint or fanciful, especially in an appealing and amusing way."},
+{w:"Wistful",p:"adj",d:"Having or showing a feeling of vague or regretful longing."},
+{w:"Wrath",p:"noun",d:"Extreme anger."},
+{w:"Xenophobia",p:"noun",d:"Dislike of or prejudice against people from other countries."},
+{w:"Zealotry",p:"noun",d:"Fanaticism; excessive zeal."},
+{w:"Abeyance",p:"noun",d:"A state of temporary disuse or suspension."},
+{w:"Abjection",p:"noun",d:"The state of being miserable and without self-respect."},
+{w:"Abnegate",p:"verb",d:"To renounce or reject (something desired or valuable)."},
+{w:"Abrogate",p:"verb",d:"To repeal or do away with a law or formal agreement."},
+{w:"Abstain",p:"verb",d:"To restrain oneself from doing or enjoying something."},
+{w:"Abstruse",p:"adj",d:"Difficult to understand; obscure."},
+{w:"Accretion",p:"noun",d:"The process of growth or increase by gradual accumulation."},
+{w:"Acrimony",p:"noun",d:"Bitterness or ill feeling."},
+{w:"Adamant",p:"adj",d:"Refusing to be persuaded or to change one's mind."},
+{w:"Adjudicate",p:"verb",d:"To make a formal judgment or decision about a problem or dispute."},
+{w:"Admonition",p:"noun",d:"A firm warning or reprimand."},
+{w:"Adroit",p:"adj",d:"Clever or skillful in using the hands or mind."},
+{w:"Agnostic",p:"adj",d:"Relating to or holding the view that the existence of God is unknown."},
+{w:"Allay",p:"verb",d:"To diminish or put at rest (fear, suspicion, or worry)."},
+{w:"Allegory",p:"noun",d:"A story with a hidden meaning; a symbolic narrative."},
+{w:"Amend",p:"verb",d:"To make minor changes in (a text) to make it fairer or more accurate."},
+{w:"Amenity",p:"noun",d:"A desirable or useful feature or facility of a building or place."},
+{w:"Amicable",p:"adj",d:"Having a spirit of friendliness; without serious disagreement."},
+{w:"Anarchy",p:"noun",d:"A state of disorder due to absence of authority."},
+{w:"Ancillary",p:"adj",d:"Providing necessary support to the primary activities."},
+{w:"Anodyne",p:"adj",d:"Not likely to offend or cause disagreement; inoffensive."},
+{w:"Anthropology",p:"noun",d:"The study of human societies, cultures, and human development."},
+{w:"Antithesis",p:"noun",d:"A person or thing that is the direct opposite of someone else."},
+{w:"Apogee",p:"noun",d:"The highest point in the development of something; the climax."},
+{w:"Apparition",p:"noun",d:"A ghost or other dramatic vision."},
+{w:"Appease",p:"verb",d:"To pacify or placate someone by acceding to their demands."},
+{w:"Approbation",p:"noun",d:"Approval or praise."},
+{w:"Apt",p:"adj",d:"Appropriate or suitable in the circumstances."},
+{w:"Arbitrate",p:"verb",d:"To reach an authoritative judgment or settlement."},
+{w:"Archetype",p:"noun",d:"A very typical example of a certain person or thing."},
+{w:"Ardor",p:"noun",d:"Enthusiasm or passion."},
+{w:"Arraign",p:"verb",d:"To call (someone) before a court to answer a criminal charge."},
+{w:"Articulation",p:"noun",d:"The action of putting into words an idea; clarity of expression."},
+{w:"Artifice",p:"noun",d:"Clever or cunning devices or expedients, especially to trick."},
+{w:"Ascend",p:"verb",d:"To go up or climb."},
+{w:"Ascertain",p:"verb",d:"To find (something) out for certain; make sure of."},
+{w:"Ascribe",p:"verb",d:"To attribute something to (a cause)."},
+{w:"Asperse",p:"verb",d:"To attack or criticize the reputation of (someone)."},
+{w:"Assail",p:"verb",d:"To make a concerted and vigorous attack on."},
+{w:"Assiduous",p:"adj",d:"Showing great care and perseverance."},
+{w:"Atrophy",p:"verb",d:"To waste away, typically due to the degeneration of cells."},
+{w:"Atypical",p:"adj",d:"Not representative of a type, group, or class; unusual."},
+{w:"Aver",p:"verb",d:"To state or assert to be the case."},
+{w:"Bellicose",p:"adj",d:"Demonstrating aggression and willingness to fight."},
+{w:"Bifurcate",p:"verb",d:"To divide into two branches or forks."},
+{w:"Callousness",p:"noun",d:"Cruel disregard for other people's feelings."},
+{w:"Camaraderie",p:"noun",d:"Mutual trust and friendship among people who spend time together."},
+{w:"Castigator",p:"noun",d:"One who reprimands (someone) severely."},
+{w:"Catalyst",p:"noun",d:"A person or thing that precipitates an event."},
+{w:"Catharsis",p:"noun",d:"The process of releasing strong or repressed emotions."},
+{w:"Causality",p:"noun",d:"The relationship between cause and effect."},
+{w:"Censorious",p:"adj",d:"Severely critical of others."},
+{w:"Charlatan",p:"noun",d:"A person falsely claiming to have a special knowledge or skill; a fraud."},
+{w:"Chiasmus",p:"noun",d:"A rhetorical device in which words are repeated in reverse order."},
+{w:"Chimerical",p:"adj",d:"Existing only as a fantasy; wildly fanciful."},
+{w:"Circumlocution",p:"noun",d:"The use of many words where fewer would do, especially to be vague."},
+{w:"Clamorous",p:"adj",d:"Making a loud and confused noise; vigorously demanding."},
+{w:"Clandestine",p:"adj",d:"Kept secret or done secretively, especially because illicit."},
+{w:"Codicil",p:"noun",d:"An addition or supplement that explains, modifies, or revokes a will."},
+{w:"Coercive",p:"adj",d:"Relating to using force or threats; intended to compel."},
+{w:"Collusion",p:"noun",d:"Secret or illegal cooperation in order to deceive others."},
+{w:"Complaisant",p:"adj",d:"Willing to please others; not constrained by rigid standards."},
+{w:"Compunction",p:"noun",d:"A feeling of guilt or moral scruple that prevents one from doing something."},
+{w:"Conceit",p:"noun",d:"Excessive pride in oneself; an unusual metaphor in literature."},
+{w:"Condescension",p:"noun",d:"The attitude that one is superior to others; patronizing behavior."},
+{w:"Conjecture",p:"noun",d:"An opinion or conclusion formed on the basis of incomplete information."},
+{w:"Construe",p:"verb",d:"To interpret (a word or action) in a particular way."},
+{w:"Contemptuous",p:"adj",d:"Showing contempt; scornful."},
+{w:"Contrite",p:"adj",d:"Feeling or expressing remorse at past wrongdoing; repentant."},
+{w:"Contrite",p:"adj",d:"Feeling or expressing guilt and remorse."},
+{w:"Contumacious",p:"adj",d:"Stubbornly or willfully disobedient to authority."},
+{w:"Conundrum",p:"noun",d:"A confusing and difficult problem or question."},
+{w:"Convivial",p:"adj",d:"(of an atmosphere or event) friendly, lively, and enjoyable."},
+{w:"Corporeal",p:"adj",d:"Relating to a person's body, especially as opposed to the spirit."},
+{w:"Corroboration",p:"noun",d:"Evidence that confirms or supports a statement or theory."},
+{w:"Counterfeit",p:"adj",d:"Made in exact imitation of something valuable with intent to deceive."},
+{w:"Cumbersome",p:"adj",d:"Large or heavy and therefore difficult to carry or use."},
+{w:"Cunning",p:"adj",d:"Having or showing skill in achieving goals through clever means."},
+{w:"Debilitate",p:"verb",d:"To make (someone) weak and infirm."},
+{w:"Decry",p:"verb",d:"To publicly denounce; to express strong disapproval of."},
+{w:"Deference",p:"noun",d:"Humble submission and respect toward someone."},
+{w:"Deign",p:"verb",d:"To do something that one considers to be beneath one's dignity."},
+{w:"Deprecate",p:"verb",d:"To express disapproval of."},
+{w:"Deride",p:"verb",d:"To express contempt for; to ridicule."},
+{w:"Derive",p:"verb",d:"To obtain something from a specified source."},
+{w:"Despot",p:"noun",d:"A ruler who holds absolute power, typically using it in a cruel way."},
+{w:"Destitute",p:"adj",d:"Without the basic necessities of life; extremely poor."},
+{w:"Dictatorial",p:"adj",d:"Of or typical of a ruler with total power; autocratic."},
+{w:"Diffidence",p:"noun",d:"Modesty or shyness resulting from a lack of self-confidence."},
+{w:"Dilatory",p:"adj",d:"Slow to act; intended to cause delay."},
+{w:"Disaffection",p:"noun",d:"A state or feeling of being dissatisfied with those in authority."},
+{w:"Disclaim",p:"verb",d:"To refuse to acknowledge; to deny responsibility for."},
+{w:"Discordance",p:"noun",d:"Disagreement or lack of harmony."},
+{w:"Discriminate",p:"verb",d:"To make an unjust distinction in the treatment of different categories."},
+{w:"Disenchant",p:"verb",d:"To free from illusion or false belief; to disillusionize."},
+{w:"Disenfranchise",p:"verb",d:"To deprive of a right or privilege."},
+{w:"Disingenuous",p:"adj",d:"Not candid or sincere, typically by pretending ignorance."},
+{w:"Dispassionate",p:"adj",d:"Not influenced by strong emotion; rational and impartial."},
+{w:"Dissent",p:"noun",d:"The holding or expression of opinions at variance with those commonly held."},
+{w:"Dissolute",p:"adj",d:"Lax in morals; licentious; overindulgent."},
+{w:"Distend",p:"verb",d:"To swell or cause to swell by pressure from inside."},
+{w:"Divert",p:"verb",d:"To cause (someone or something) to change course or purpose."},
+{w:"Divisive",p:"adj",d:"Tending to cause disagreement or hostility between people."},
+{w:"Doctrine",p:"noun",d:"A belief or set of beliefs held and taught by a church, political party."},
+{w:"Dolorous",p:"adj",d:"Feeling or expressing great sorrow or distress."},
+{w:"Downcast",p:"adj",d:"Feeling despondent; directed downward."},
+{w:"Draconian",p:"adj",d:"(of laws or their application) excessively harsh and severe."},
+{w:"Duplicitous",p:"adj",d:"Deceitful; characterized by duplicity."},
+{w:"Earnest",p:"adj",d:"Resulting from or showing sincere and intense conviction."},
+{w:"Eccentric",p:"adj",d:"Unconventional and slightly strange in behavior or appearance."},
+{w:"Egalitarianism",p:"noun",d:"The doctrine that all people should be treated equally."},
+{w:"Eloquent",p:"adj",d:"Fluent or persuasive in speaking or writing."},
+{w:"Embody",p:"verb",d:"To be an expression of or give a tangible form to (an idea, quality, feeling)."},
+{w:"Empiricism",p:"noun",d:"The theory that all knowledge comes from sensory experience."},
+{w:"Emulate",p:"verb",d:"To match or surpass by imitation."},
+{w:"Encumber",p:"verb",d:"To restrict or burden; impede or complicate."},
+{w:"Enigma",p:"noun",d:"A person or thing that is mysterious, puzzling, or difficult to understand."},
+{w:"Ephemeral",p:"adj",d:"Lasting for a very short time."},
+{w:"Equable",p:"adj",d:"Calm and even-tempered; not easily disturbed."},
+{w:"Equitable",p:"adj",d:"Fair and impartial."},
+{w:"Equivocate",p:"verb",d:"To use ambiguous language so as to conceal the truth."},
+{w:"Espouse",p:"verb",d:"To adopt or support (a cause, belief, or way of life)."},
+{w:"Estrange",p:"verb",d:"To cause (someone) to be no longer close or affectionate to someone."},
+{w:"Evocative",p:"adj",d:"Bringing strong images, memories, or feelings to mind."},
+{w:"Exasperate",p:"verb",d:"To irritate intensely; infuriate."},
+{w:"Exemplify",p:"verb",d:"To be a typical example of."},
+{w:"Exhaustive",p:"adj",d:"Including or considering all elements; thorough."},
+{w:"Exonerate",p:"verb",d:"To officially absolve from blame or criminal charge."},
+{w:"Expatiate",p:"verb",d:"To speak or write in detail about; to dwell on."},
+{w:"Expeditious",p:"adj",d:"Done with speed and efficiency."},
+{w:"Explicit",p:"adj",d:"Stated clearly and in detail, leaving no room for confusion."},
+{w:"Exponent",p:"noun",d:"A person who promotes an idea or theory; a promoter."},
+{w:"Extravagant",p:"adj",d:"Lacking restraint in spending money; exceeding what is reasonable."},
+{w:"Exuberance",p:"noun",d:"The quality of being full of energy, excitement, and cheerfulness."},
+{w:"Fabrication",p:"noun",d:"The action of inventing false information; a lie or forgery."},
+{w:"Fallible",p:"adj",d:"Capable of making mistakes or being erroneous."},
+{w:"Fastidious",p:"adj",d:"Very attentive to and concerned about accuracy."},
+{w:"Fawn",p:"verb",d:"To seek to please someone by excessive flattery."},
+{w:"Feign",p:"verb",d:"To pretend to be affected by something."},
+{w:"Felicity",p:"noun",d:"Intense happiness; the ability to find apt expression."},
+{w:"Finagle",p:"verb",d:"To obtain (something) by devious or dishonest means."},
+{w:"Florid",p:"adj",d:"Having a red or flushed complexion; elaborately ornate."},
+{w:"Flourish",p:"verb",d:"To grow or develop in a healthy way; to make bold gestures."},
+{w:"Fluctuate",p:"verb",d:"To rise and fall irregularly in number or amount."},
+{w:"Forestall",p:"verb",d:"To prevent or obstruct (an anticipated event) by taking action first."},
+{w:"Fortitude",p:"noun",d:"Courage in pain or adversity."},
+{w:"Fortuitous",p:"adj",d:"Happening by accident or chance rather than design; lucky."},
+{w:"Fraught",p:"adj",d:"Filled with or likely to result in (something undesirable)."},
+{w:"Frivolous",p:"adj",d:"Not having any serious purpose or value; silly."},
+{w:"Frugality",p:"noun",d:"The quality of being economical with money or food; thrift."},
+{w:"Futile",p:"adj",d:"Incapable of producing any useful result; pointless."},
+{w:"Gainsay",p:"verb",d:"To deny or contradict."},
+{w:"Gallant",p:"adj",d:"Brave; heroic; (of a man) showing courtesy and attentiveness to women."},
+{w:"Garrulous",p:"adj",d:"Excessively talkative, especially on trivial matters."},
+{w:"Grandiose",p:"adj",d:"Impressive and imposing in appearance; absurdly ambitious."},
+{w:"Gratify",p:"verb",d:"To give (someone) pleasure or satisfaction."},
+{w:"Grotesque",p:"adj",d:"Comically or repulsively ugly or distorted."},
+{w:"Guile",p:"noun",d:"Sly or cunning intelligence used to deceive."},
+{w:"Gusto",p:"noun",d:"Enjoyment and enthusiasm in doing something."},
+{w:"Hapless",p:"adj",d:"Unfortunately unlucky."},
+{w:"Harmless",p:"adj",d:"Not able or likely to cause harm."},
+{w:"Hegemonic",p:"adj",d:"Relating to leadership or dominance of one entity over others."},
+{w:"Hermeneutics",p:"noun",d:"The branch of knowledge that deals with interpretation."},
+{w:"Homily",p:"noun",d:"A religious discourse that is intended primarily for spiritual edification."},
+{w:"Hyperbole",p:"noun",d:"Exaggerated statements not meant to be taken literally."},
+{w:"Iconography",p:"noun",d:"The visual images and symbols used in a work of art."},
+{w:"Idiosyncrasy",p:"noun",d:"A mode of behavior or way of thought peculiar to an individual."},
+{w:"Immutable",p:"adj",d:"Unchanging over time or unable to be changed."},
+{w:"Impasse",p:"noun",d:"A situation in which no progress is possible; a deadlock."},
+{w:"Impediment",p:"noun",d:"A hindrance or obstruction in doing something."},
+{w:"Imperturbable",p:"adj",d:"Unable to be upset or excited; calm."},
+{w:"Implausible",p:"adj",d:"Not seeming reasonable or probable; failing to convince."},
+{w:"Improvident",p:"adj",d:"Not having or showing foresight; failing to provide for the future."},
+{w:"Inadvertent",p:"adj",d:"Not resulting from or achieved through deliberate planning."},
+{w:"Inane",p:"adj",d:"Lacking sense or meaning; silly."},
+{w:"Inarticulate",p:"adj",d:"Unable to express one's ideas or feelings clearly."},
+{w:"Incendiary",p:"adj",d:"Tending to stir up conflict; inflammatory."},
+{w:"Incessant",p:"adj",d:"(of something regarded as unpleasant) continuing without pause."},
+{w:"Incoherence",p:"noun",d:"The quality of being expressed in an incomprehensible way."},
+{w:"Inconsequential",p:"adj",d:"Not important or significant."},
+{w:"Incredulous",p:"adj",d:"(of a person or their manner) unwilling or unable to believe something."},
+{w:"Indefatigable",p:"adj",d:"Persisting tirelessly; not easily exhausted."},
+{w:"Indeterminate",p:"adj",d:"Not exactly known, established, or defined."},
+{w:"Indolence",p:"noun",d:"Avoidance of activity; idleness; laziness."},
+{w:"Indulgent",p:"adj",d:"Having or indicating a tendency to be overly generous."},
+{w:"Inexorable",p:"adj",d:"Impossible to stop or prevent; continuing without regard to obstacles."},
+{w:"Infamy",p:"noun",d:"The state of being well known for some bad quality; wickedness."},
+{w:"Ingenious",p:"adj",d:"Clever, original, and inventive."},
+{w:"Ingratiate",p:"verb",d:"To bring oneself into favor with someone by flattering."},
+{w:"Inherent",p:"adj",d:"Existing in something as a permanent, essential, or characteristic attribute."},
+{w:"Inimical",p:"adj",d:"Tending to obstruct or harm; hostile."},
+{w:"Insatiable",p:"adj",d:"(of appetite or desire) impossible to satisfy."},
+{w:"Insipid",p:"adj",d:"Lacking vigor or interest; dull."},
+{w:"Insouciant",p:"adj",d:"Showing a casual lack of concern; indifferent."},
+{w:"Instigate",p:"verb",d:"To bring about or initiate an action or event."},
+{w:"Insufferable",p:"adj",d:"Too extreme to bear; intolerable."},
+{w:"Integrity",p:"noun",d:"The quality of being honest and having strong moral principles."},
+{w:"Intemperance",p:"noun",d:"Lack of moderation or restraint."},
+{w:"Introspective",p:"adj",d:"Examining one's own thoughts and feelings."},
+{w:"Intuition",p:"noun",d:"The ability to understand something immediately without conscious reasoning."},
+{w:"Inveterate",p:"adj",d:"Having a particular habit, activity deeply established."},
+{w:"Irrefutable",p:"adj",d:"Impossible to deny or disprove."},
+{w:"Irrational",p:"adj",d:"Not logical or reasonable."},
+{w:"Irresolute",p:"adj",d:"Showing or feeling hesitancy; uncertain."},
+{w:"Itinerary",p:"noun",d:"A planned route or journey."},
+{w:"Languidly",p:"adv",d:"Without energy; slowly and weakly."},
+{w:"Lassitude",p:"noun",d:"Physical or mental weariness; lack of energy."},
+{w:"Legitimate",p:"adj",d:"Conforming to the law or to rules; able to be defended with logic."},
+{w:"Lethargy",p:"noun",d:"A lack of energy and enthusiasm."},
+{w:"Liability",p:"noun",d:"The state of being responsible for something; a person or thing causing problems."},
+{w:"Lofty",p:"adj",d:"Of imposing height; noble and ambitious."},
+{w:"Longevity",p:"noun",d:"Long life; the fact of lasting a long time."},
+{w:"Loquacity",p:"noun",d:"The quality of talking a great deal; talkativeness."},
+{w:"Lucidity",p:"noun",d:"Clarity of expression or thought."},
+{w:"Luster",p:"noun",d:"A gentle sheen or soft glow; glory or distinction."},
+{w:"Malign",p:"verb",d:"To speak about (someone) in a spitefully critical manner."},
+{w:"Malodorous",p:"adj",d:"Smelling very unpleasant."},
+{w:"Manifestation",p:"noun",d:"An event, action, or object that embodies something."},
+{w:"Marginalize",p:"verb",d:"To treat (a person, group, or concept) as insignificant."},
+{w:"Martial",p:"adj",d:"Of or appropriate to war; warlike."},
+{w:"Mediation",p:"noun",d:"Intervention in a dispute in order to resolve it."},
+{w:"Mendacity",p:"noun",d:"Untruthfulness."},
+{w:"Meritorious",p:"adj",d:"Deserving reward or praise."},
+{w:"Minutiae",p:"noun",d:"The small, precise, or trivial details of something."},
+{w:"Mirth",p:"noun",d:"Amusement; laughter."},
+{w:"Mollification",p:"noun",d:"The act of appeasing someone's anger."},
+{w:"Momentous",p:"adj",d:"Of great importance or significance, especially in relation to future events."},
+{w:"Monotony",p:"noun",d:"Tedious lack of variety; sameness."},
+{w:"Morosity",p:"noun",d:"The quality of being sullen or ill-tempered."},
+{w:"Mortify",p:"verb",d:"To cause (someone) to feel embarrassed, ashamed, or humiliated."},
+{w:"Multifarious",p:"adj",d:"Many and of various types."},
+{w:"Munificent",p:"adj",d:"More generous than is usual or necessary."},
+{w:"Myopic",p:"adj",d:"Short-sighted; lacking imagination, foresight, or intellectual insight."},
+{w:"Narcissism",p:"noun",d:"Excessive interest in or admiration of oneself and one's appearance."},
+{w:"Nefarious",p:"adj",d:"Wicked or criminal."},
+{w:"Negligible",p:"adj",d:"So small or unimportant as to be not worth considering."},
+{w:"Nemesis",p:"noun",d:"A long-standing rival; an inescapable agent of someone's downfall."},
+{w:"Nihilistic",p:"adj",d:"Rejecting all religious and moral principles in the belief that life is meaningless."},
+{w:"Noxious",p:"adj",d:"Harmful, poisonous, or very unpleasant."},
+{w:"Obfuscation",p:"noun",d:"The action of making something obscure or unclear."},
+{w:"Objective",p:"adj",d:"Not influenced by personal feelings or opinions; impartial."},
+{w:"Obloquy",p:"noun",d:"Strong public criticism; disgrace resulting from public blame."},
+{w:"Obsequy",p:"noun",d:"Funeral rites (usually used in plural: obsequies)."},
+{w:"Obstreperous",p:"adj",d:"Noisy and difficult to control."},
+{w:"Odious",p:"adj",d:"Extremely unpleasant; repulsive."},
+{w:"Officious",p:"adj",d:"Asserting authority in an annoying way; too eager to give orders."},
+{w:"Omniscient",p:"adj",d:"Knowing everything."},
+{w:"Onerous",p:"adj",d:"Involving a great deal of effort, trouble, or difficulty."},
+{w:"Opulence",p:"noun",d:"Great wealth or luxuriousness."},
+{w:"Orator",p:"noun",d:"A public speaker, especially one who is eloquent or skilled."},
+{w:"Oscillate",p:"verb",d:"To move or swing back and forth in a regular rhythm."},
+{w:"Ostracism",p:"noun",d:"Exclusion from a society or group."},
+{w:"Overbearing",p:"adj",d:"Unpleasantly or arrogantly domineering."},
+{w:"Overwrought",p:"adj",d:"In a state of nervous excitement or anxiety."},
+{w:"Pacify",p:"verb",d:"To quell the anger, agitation, or excitement of."},
+{w:"Palliative",p:"adj",d:"(of treatment) relieving pain or alleviating a problem without curing it."},
+{w:"Panacea",p:"noun",d:"A solution or remedy for all difficulties or diseases."},
+{w:"Panegyric",p:"noun",d:"A public speech or published text in praise of someone."},
+{w:"Paradoxical",p:"adj",d:"Seeming absurd or self-contradictory."},
+{w:"Pariah",p:"noun",d:"An outcast."},
+{w:"Parody",p:"noun",d:"An imitation of the style of a particular author for comic effect."},
+{w:"Parsimony",p:"noun",d:"Extreme unwillingness to spend money; stinginess."},
+{w:"Partisan",p:"noun",d:"A strong supporter of a party, cause, or person."},
+{w:"Pastoral",p:"adj",d:"Used in reference to country life; (of a teacher) giving personal care."},
+{w:"Pathological",p:"adj",d:"Compulsive; obsessive; relating to disease."},
+{w:"Patronage",p:"noun",d:"The support given by a patron; the regular custom given to a business."},
+{w:"Peccadillo",p:"noun",d:"A small, relatively unimportant offense or sin."},
+{w:"Pedant",p:"noun",d:"A person who is excessively concerned with minor details."},
+{w:"Pejoration",p:"noun",d:"The process by which a word comes to have a more negative meaning."},
+{w:"Penurious",p:"adj",d:"Extremely poor; unwilling to spend money."},
+{w:"Peregrinate",p:"verb",d:"To travel or wander from place to place."},
+{w:"Perfidy",p:"noun",d:"The state of being deceitful and untrustworthy."},
+{w:"Perilous",p:"adj",d:"Full of danger or risk."},
+{w:"Pernicious",p:"adj",d:"Having a harmful effect, especially in a gradual or subtle way."},
+{w:"Perspicuity",p:"noun",d:"The quality of being clearly expressed and easily understood."},
+{w:"Pertinacity",p:"noun",d:"Stubborn or persistent quality."},
+{w:"Perverse",p:"adj",d:"Showing a deliberate desire to behave in a way that is unreasonable."},
+{w:"Pessimism",p:"noun",d:"A tendency to see the worst aspect of things."},
+{w:"Philistine",p:"noun",d:"A person who is hostile or indifferent to culture and the arts."},
+{w:"Phlegmatic",p:"adj",d:"Having an unemotional and stolidly calm disposition."},
+{w:"Piety",p:"noun",d:"The quality of being religious or reverent."},
+{w:"Pique",p:"verb",d:"To stimulate (interest or curiosity); to feel irritated."},
+{w:"Plagiarize",p:"verb",d:"To take (the work of someone else) and pass it off as one's own."},
+{w:"Pliant",p:"adj",d:"Easily influenced or swayed; flexible."},
+{w:"Polemic",p:"noun",d:"A strong verbal or written attack on someone or something."},
+{w:"Polymath",p:"noun",d:"A person of wide knowledge or learning."},
+{w:"Pontiff",p:"noun",d:"The Pope; any high priest."},
+{w:"Pontificate",p:"verb",d:"To express one's opinions pompously and dogmatically."},
+{w:"Portentous",p:"adj",d:"Of momentous significance; pompously solemn."},
+{w:"Posterity",p:"noun",d:"All future generations of people."},
+{w:"Pragmatist",p:"noun",d:"A person who is guided by practical considerations."},
+{w:"Preamble",p:"noun",d:"A preliminary statement or introduction."},
+{w:"Precept",p:"noun",d:"A general rule intended to regulate behavior."},
+{w:"Predatory",p:"adj",d:"Seeking to exploit others; (of an animal) preying on others."},
+{w:"Predilection",p:"noun",d:"A preference or special liking for something."},
+{w:"Predominant",p:"adj",d:"Present as the strongest or main element; having power or influence."},
+{w:"Presumptuous",p:"adj",d:"Failing to observe the limits of what is permitted or appropriate."},
+{w:"Proclivity",p:"noun",d:"A tendency to choose or do something regularly; a preference."},
+{w:"Prodigious",p:"adj",d:"Remarkably great in extent, size, or degree."},
+{w:"Profundity",p:"noun",d:"Deep insight; great depth of knowledge or thought."},
+{w:"Prolific",p:"adj",d:"Producing many works, results, or offspring; abundantly creative."},
+{w:"Propagate",p:"verb",d:"To spread and promote (an idea, theory, etc.) widely."},
+{w:"Prosaic",p:"adj",d:"Having the style or diction of prose; commonplace and unromantic."},
+{w:"Provoke",p:"verb",d:"To stimulate or give rise to (a reaction or emotion) in someone."},
+{w:"Proximity",p:"noun",d:"Nearness in space, time, or relationship."},
+{w:"Prudish",p:"adj",d:"Having or revealing a tendency to be easily shocked by things relating to sex."},
+{w:"Puerile",p:"adj",d:"Childishly silly and trivial."},
+{w:"Purport",p:"verb",d:"To appear or claim to be or do something, especially falsely."},
+{w:"Quell",p:"verb",d:"To put an end to (a rebellion or other disorder); to suppress."},
+{w:"Querulous",p:"adj",d:"Complaining in a petulant or whining manner."},
+{w:"Quintessential",p:"adj",d:"Representing the most perfect or typical example of a quality."},
+{w:"Quixotism",p:"noun",d:"Unrealistic and impractical idealism."},
+{w:"Rampant",p:"adj",d:"(especially of something unwelcome) flourishing or spreading unchecked."},
+{w:"Rant",p:"verb",d:"To speak or shout at length in a wild, impassioned way."},
+{w:"Rapture",p:"noun",d:"A feeling of intense pleasure or joy."},
+{w:"Ratiocination",p:"noun",d:"The process of logical thought."},
+{w:"Reactionary",p:"adj",d:"Opposing political or social progress or reform."},
+{w:"Rebuff",p:"verb",d:"To reject (someone or something) in an abrupt or ungracious manner."},
+{w:"Recidivism",p:"noun",d:"The tendency of a convicted criminal to reoffend."},
+{w:"Redolent",p:"adj",d:"Strongly reminiscent or suggestive of something."},
+{w:"Redress",p:"verb",d:"To remedy or set right (an undesirable situation)."},
+{w:"Refute",p:"verb",d:"To prove (a statement or theory) to be wrong."},
+{w:"Reiterate",p:"verb",d:"To say something again or repeatedly for emphasis or clarity."},
+{w:"Relentless",p:"adj",d:"Unceasingly intense; not stopping."},
+{w:"Remonstrance",p:"noun",d:"A strongly made protest."},
+{w:"Render",p:"verb",d:"To provide or give (a service, help, etc.); to cause to be."},
+{w:"Renounce",p:"verb",d:"To formally declare one's abandonment of (a claim, right, or possession)."},
+{w:"Replete",p:"adj",d:"Filled or well-supplied with something; sated."},
+{w:"Reproach",p:"noun",d:"The expression of disapproval or disappointment."},
+{w:"Reprobate",p:"noun",d:"An unprincipled person; a person morally bankrupt."},
+{w:"Rescind",p:"verb",d:"To revoke, cancel, or repeal (a law, order, or agreement)."},
+{w:"Resignation",p:"noun",d:"Acceptance of something undesirable but inevitable."},
+{w:"Resplendent",p:"adj",d:"Attractive and impressive through being richly colorful."},
+{w:"Restive",p:"adj",d:"(of a person) unable to keep still; impatient under restriction."},
+{w:"Reticence",p:"noun",d:"The quality of not revealing one's thoughts or feelings; reserve."},
+{w:"Revelatory",p:"adj",d:"Revealing something hitherto unknown; enlightening."},
+{w:"Reverential",p:"adj",d:"Showing deep respect; worshipful."},
+{w:"Ribald",p:"adj",d:"Referring to sexual matters in an amusingly rude manner."},
+{w:"Riposte",p:"noun",d:"A quick, clever reply to an insult; a counterthrust in fencing."},
+{w:"Robust",p:"adj",d:"Strong and healthy; vigorous."},
+{w:"Rogue",p:"noun",d:"A dishonest or mischievous person."},
+{w:"Rudimentary",p:"adj",d:"Involving or limited to basic principles; undeveloped."},
+{w:"Ruminate",p:"verb",d:"To think deeply about something; to chew the cud."},
+{w:"Sagacious",p:"adj",d:"Having or showing keen mental discernment; shrewd."},
+{w:"Salient",p:"adj",d:"Most noticeable or important; prominent."},
+{w:"Sanction",p:"noun",d:"A threatened penalty for disobeying a law; official permission."},
+{w:"Sarcastic",p:"adj",d:"Marked by or given to using irony to mock or convey contempt."},
+{w:"Satiate",p:"verb",d:"To satisfy (a desire or an appetite) fully."},
+{w:"Saturnine",p:"adj",d:"Slow and gloomy; having a sardonic look."},
+{w:"Savvy",p:"noun",d:"Shrewdness and practical knowledge; ability."},
+{w:"Scathing",p:"adj",d:"Witheringly scornful; severely critical."},
+{w:"Scholarly",p:"adj",d:"Involving or relating to serious academic study."},
+{w:"Scoff",p:"verb",d:"To speak to someone or about something in a scornfully derisive way."},
+{w:"Scornful",p:"adj",d:"Feeling or expressing contempt or derision."},
+{w:"Sedulous",p:"adj",d:"Showing dedication and diligence."},
+{w:"Selfless",p:"adj",d:"Concerned more with the needs and wishes of others than with one's own."},
+{w:"Semantics",p:"noun",d:"The branch of linguistics concerned with meaning in language."},
+{w:"Sensational",p:"adj",d:"(of an account) presenting information in a way intended to provoke interest."},
+{w:"Sentimental",p:"adj",d:"Of or prompted by feelings of tenderness, sadness, or nostalgia."},
+{w:"Serendipitous",p:"adj",d:"Occurring or discovered by chance in a happy or beneficial way."},
+{w:"Servitude",p:"noun",d:"The state of being a slave or completely subject to someone more powerful."},
+{w:"Simile",p:"noun",d:"A figure of speech involving the comparison of one thing with another."},
+{w:"Sinuous",p:"adj",d:"Having many curves and turns; lithe and supple."},
+{w:"Skepticism",p:"noun",d:"A skeptical attitude; doubt as to the truth of something."},
+{w:"Sloth",p:"noun",d:"Reluctance to work or make an effort; laziness."},
+{w:"Sobriety",p:"noun",d:"The quality of being staid or solemn; the state of being sober."},
+{w:"Soliloquy",p:"noun",d:"An act of speaking one's thoughts aloud when alone."},
+{w:"Somber",p:"adj",d:"Dark or dull in color; oppressively solemn."},
+{w:"Sophism",p:"noun",d:"A clever but false argument, especially one used to deceive."},
+{w:"Sophomoric",p:"adj",d:"Pretentious or juvenile; overconfident but with limited knowledge."},
+{w:"Speculate",p:"verb",d:"To form a theory or conjecture without firm evidence."},
+{w:"Sporadic",p:"adj",d:"Occurring at irregular intervals; not continuous or steady."},
+{w:"Squander",p:"verb",d:"To waste (something, especially money) in a reckless manner."},
+{w:"Staid",p:"adj",d:"Respectable and unadventurous; sedate."},
+{w:"Stalwart",p:"adj",d:"Loyal, reliable, and hardworking."},
+{w:"Stifle",p:"verb",d:"To make (someone) unable to breathe; to suppress."},
+{w:"Stoicism",p:"noun",d:"The endurance of pain or hardship without showing feelings."},
+{w:"Stringent",p:"adj",d:"(of regulations or requirements) strict or precise; leaving no room for flexibility."},
+{w:"Subdue",p:"verb",d:"To overcome, quieten, or bring under control."},
+{w:"Subjective",p:"adj",d:"Based on or influenced by personal feelings or opinions."},
+{w:"Sublimate",p:"verb",d:"To divert the energy of (a primitive impulse) into a more socially acceptable activity."},
+{w:"Sublime",p:"adj",d:"Of such excellence as to inspire great admiration; awe-inspiring."},
+{w:"Subsist",p:"verb",d:"To maintain or support oneself at a minimal level."},
+{w:"Substantiate",p:"verb",d:"To provide evidence to support or prove the truth of."},
+{w:"Subterfuge",p:"noun",d:"Deceit used in order to achieve one's goal."},
+{w:"Subvert",p:"verb",d:"To undermine the power and authority of an established system."},
+{w:"Succumb",p:"verb",d:"To fail to resist pressure, temptation, or some other negative force."},
+{w:"Superfluity",p:"noun",d:"An unnecessarily or excessively large amount of something."},
+{w:"Suppress",p:"verb",d:"To forcibly put an end to; to prevent from being expressed."},
+{w:"Sycophancy",p:"noun",d:"Obsequious behavior; excessive flattery."},
+{w:"Systematic",p:"adj",d:"Done or acting according to a fixed plan; methodical."},
+{w:"Tactful",p:"adj",d:"Having or showing skill and sensitivity in dealing with others."},
+{w:"Tedious",p:"adj",d:"Too long, slow, or dull; tiresome or monotonous."},
+{w:"Temperamental",p:"adj",d:"Liable to unreasonable changes of mood; relating to a person's temperament."},
+{w:"Tenacity",p:"noun",d:"The quality or fact of being able to grip something firmly; persistence."},
+{w:"Tergiversate",p:"verb",d:"To make conflicting statements; to be deliberately evasive."},
+{w:"Timeless",p:"adj",d:"Not affected by the passage of time or changes in fashion."},
+{w:"Titular",p:"adj",d:"Holding a title without substantive duties or authority."},
+{w:"Toady",p:"noun",d:"A person who behaves obsequiously to gain favor."},
+{w:"Torpor",p:"noun",d:"A state of physical or mental inactivity; lethargy."},
+{w:"Totalitarian",p:"adj",d:"Relating to a system of government that is centralized and demands complete subservience."},
+{w:"Transient",p:"adj",d:"Lasting only for a short time; impermanent."},
+{w:"Transparent",p:"adj",d:"Easy to perceive or detect; open; frank."},
+{w:"Treachery",p:"noun",d:"Betrayal of trust; deceptive action."},
+{w:"Trepidation",p:"noun",d:"A feeling of fear or agitation about something that may happen."},
+{w:"Trivial",p:"adj",d:"Of little value or importance."},
+{w:"Troubadour",p:"noun",d:"A medieval French poet and musician who performed songs of courtly love."},
+{w:"Turbulence",p:"noun",d:"A state of conflict, confusion, or disorder."},
+{w:"Turpitude",p:"noun",d:"Wickedness and moral depravity."},
+{w:"Tyranny",p:"noun",d:"Cruel and oppressive government or rule."},
+{w:"Unabashed",p:"adj",d:"Not embarrassed, disconcerted, or ashamed."},
+{w:"Unconscionable",p:"adj",d:"Not right or reasonable; not in accordance with what is right."},
+{w:"Undulate",p:"verb",d:"To move with a smooth wavelike motion."},
+{w:"Utilitarian",p:"adj",d:"Designed to be useful and practical rather than attractive."},
+{w:"Vacuity",p:"noun",d:"Empty space; lack of intelligence; emptiness."},
+{w:"Vehemence",p:"noun",d:"The display of strong feeling; forcefulness."},
+{w:"Vengeance",p:"noun",d:"Punishment inflicted on someone as retribution for harm done."},
+{w:"Verbosity",p:"noun",d:"The quality of using more words than needed; long-windedness."},
+{w:"Versatile",p:"adj",d:"Able to adapt or be adapted to many different functions."},
+{w:"Vestige",p:"noun",d:"A trace or remnant of something that is disappearing or no longer exists."},
+{w:"Vexation",p:"noun",d:"The state of being annoyed, frustrated, or worried."},
+{w:"Vicissitude",p:"noun",d:"A change of circumstances, especially adverse ones; ups and downs."},
+{w:"Vigilance",p:"noun",d:"The action or state of keeping careful watch for possible danger."},
+{w:"Vindication",p:"noun",d:"The action of clearing someone of blame or suspicion."},
+{w:"Virtuoso",p:"noun",d:"A person highly skilled in music or another artistic pursuit."},
+{w:"Vituperate",p:"verb",d:"To blame or insult (someone) in strong or violent language."},
+{w:"Voluble",p:"adj",d:"Talking fluently, readily, or incessantly."},
+{w:"Voluminous",p:"adj",d:"Occupying or containing much space; large in volume."},
+{w:"Vulnerable",p:"adj",d:"Exposed to the possibility of being attacked or harmed."},
+{w:"Waffle",p:"verb",d:"To speak or write vaguely or at unnecessary length."},
+{w:"Wane",p:"verb",d:"To decrease in vigor, power, or extent; to become weaker."},
+{w:"Wanton",p:"adj",d:"Deliberate and unprovoked; gratuitous."},
+{w:"Wily",p:"adj",d:"Skilled at gaining an advantage; cunning."},
+{w:"Wistfulness",p:"noun",d:"A feeling of vague or regretful longing."},
+{w:"Worldly",p:"adj",d:"Experienced and sophisticated; concerned with material values."},
+{w:"Wrath",p:"noun",d:"Extreme anger."},
+{w:"Yield",p:"verb",d:"To produce or provide; to give way to demands."},
+{w:"Zealous",p:"adj",d:"Having or showing zeal; marked by passionate devotion to a cause."},
+];
+
+// ============================================================
+// CUSTOM CARDS — stored in localStorage
+// ============================================================
+let customWords = JSON.parse(localStorage.getItem('locabio_custom') || '[]');
+let editingIndex = null; // null = adding new, number = editing
+
+// ============================================================
+// STATE
+// ============================================================
+let currentDeck = 'sat'; // 'sat' or 'custom'
+let activeDeck = [...satWords];
+let idx = 0;
+let isFlipped = false;
+
+// ============================================================
+// DECK MANAGEMENT
+// ============================================================
+function switchDeck(deck) {
+    currentDeck = deck;
+    idx = 0;
+    isFlipped = false;
+    document.getElementById('card').classList.remove('flipped');
+
+    document.getElementById('tab-sat').classList.toggle('active', deck === 'sat');
+    document.getElementById('tab-custom').classList.toggle('active', deck === 'custom');
+    document.getElementById('custom-manager').style.display = deck === 'custom' ? 'block' : 'none';
+    document.getElementById('deck-label').textContent = deck === 'sat' ? 'SAT WORDS' : 'MY CARDS';
+
+    activeDeck = deck === 'sat' ? [...satWords] : [...customWords];
+    renderCustomList();
+    updateView();
+}
+
+function updateView() {
+    const card = document.getElementById('card-area');
+    const controls = document.getElementById('control-dock');
+    const emptyState = document.getElementById('empty-state');
+
+    if (activeDeck.length === 0) {
+        card.style.display = 'none';
+        controls.style.display = 'none';
+        emptyState.style.display = 'block';
+        document.getElementById('tracker').textContent = '0 / 0';
+        document.getElementById('word-count').textContent = '0 / 0';
+        document.getElementById('percent-text').textContent = '0%';
+        document.getElementById('pb').style.width = '0%';
+        document.getElementById('deck-size').textContent = '0';
+        return;
+    }
+
+    card.style.display = 'block';
+    controls.style.display = 'flex';
+    emptyState.style.display = 'none';
+
+    const word = activeDeck[idx];
+    document.getElementById('w').textContent = word.w;
+    document.getElementById('p').textContent = word.p;
+    document.getElementById('d').textContent = word.d;
+
+    const count = idx + 1;
+    const total = activeDeck.length;
+    const pct = Math.round((count / total) * 100);
+
+    document.getElementById('tracker').textContent = `${count} / ${total}`;
+    document.getElementById('word-count').textContent = `${count} / ${total}`;
+    document.getElementById('percent-text').textContent = `${pct}%`;
+    document.getElementById('pb').style.width = `${pct}%`;
+    document.getElementById('deck-size').textContent = total.toLocaleString();
+}
+
+function toggleFlip() {
+    if (activeDeck.length === 0) return;
+    isFlipped = !isFlipped;
+    document.getElementById('card').classList.toggle('flipped', isFlipped);
+}
+
+function next() {
+    if (activeDeck.length === 0) return;
+    if (isFlipped) {
+        isFlipped = false;
+        document.getElementById('card').classList.remove('flipped');
+        setTimeout(() => { idx = (idx + 1) % activeDeck.length; updateView(); }, 280);
+    } else {
+        idx = (idx + 1) % activeDeck.length;
+        updateView();
+    }
+}
+
+function prev() {
+    if (activeDeck.length === 0) return;
+    if (isFlipped) {
+        isFlipped = false;
+        document.getElementById('card').classList.remove('flipped');
+        setTimeout(() => { idx = idx === 0 ? activeDeck.length - 1 : idx - 1; updateView(); }, 280);
+    } else {
+        idx = idx === 0 ? activeDeck.length - 1 : idx - 1;
+        updateView();
+    }
+}
+
+function shuffleDeck() {
+    for (let i = activeDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
+    }
+    idx = 0;
+    if (isFlipped) { isFlipped = false; document.getElementById('card').classList.remove('flipped'); }
+    updateView();
+    showToast('🔀 Deck shuffled!');
+}
+
+// ============================================================
+// CUSTOM CARD CRUD
+// ============================================================
+function renderCustomList() {
+    const list = document.getElementById('custom-cards-list');
+    if (customWords.length === 0) {
+        list.innerHTML = '<div class="empty-custom"><span class="emoji">📝</span>No cards yet. Add your first flashcard!</div>';
+        return;
+    }
+    list.innerHTML = customWords.map((card, i) => `
+        <div class="custom-card-item">
+            <span class="word-name">${escHtml(card.w)}</span>
+            <span class="word-pos">${escHtml(card.p)}</span>
+            <div class="item-actions">
+                <button class="btn-icon" onclick="editCard(${i})" title="Edit">✏️</button>
+                <button class="btn-icon" onclick="deleteCard(${i})" title="Delete">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function saveToStorage() {
+    localStorage.setItem('locabio_custom', JSON.stringify(customWords));
+}
+
+function openModal(isEdit = false) {
+    if (!isEdit) {
+        editingIndex = null;
+        document.getElementById('modal-title').textContent = 'Add Flashcard';
+        document.getElementById('input-word').value = '';
+        document.getElementById('input-pos').value = 'noun';
+        document.getElementById('input-def').value = '';
+    }
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(() => document.getElementById('input-word').focus(), 100);
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function saveCard() {
+    const word = document.getElementById('input-word').value.trim();
+    const pos = document.getElementById('input-pos').value;
+    const def = document.getElementById('input-def').value.trim();
+
+    if (!word || !def) {
+        showToast('⚠️ Please fill in all fields!');
+        return;
+    }
+
+    const card = { w: word, p: pos, d: def };
+
+    if (editingIndex !== null) {
+        customWords[editingIndex] = card;
+        showToast('✅ Card updated!');
+    } else {
+        customWords.push(card);
+        showToast('✅ Card added!');
+    }
+
+    saveToStorage();
+    closeModal();
+    renderCustomList();
+
+    if (currentDeck === 'custom') {
+        activeDeck = [...customWords];
+        if (editingIndex === null) idx = activeDeck.length - 1;
+        updateView();
+    }
+    editingIndex = null;
+}
+
+function editCard(i) {
+    editingIndex = i;
+    const card = customWords[i];
+    document.getElementById('modal-title').textContent = 'Edit Flashcard';
+    document.getElementById('input-word').value = card.w;
+    document.getElementById('input-pos').value = card.p;
+    document.getElementById('input-def').value = card.d;
+    openModal(true);
+}
+
+function deleteCard(i) {
+    if (!confirm(`Delete "${customWords[i].w}"?`)) return;
+    customWords.splice(i, 1);
+    saveToStorage();
+    renderCustomList();
+    if (currentDeck === 'custom') {
+        activeDeck = [...customWords];
+        if (idx >= activeDeck.length) idx = Math.max(0, activeDeck.length - 1);
+        updateView();
+    }
+    showToast('🗑️ Card deleted');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ============================================================
+// KEYBOARD
+// ============================================================
+document.addEventListener('keydown', (e) => {
+    if (document.getElementById('modal-overlay').classList.contains('open')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggleFlip(); }
+    if (e.code === 'ArrowRight') next();
+    if (e.code === 'ArrowLeft') prev();
+    if (e.code === 'KeyS') shuffleDeck();
+});
+
+// ============================================================
+// INIT
+// ============================================================
+renderCustomList();
+updateView();
+</script>
+</body>
+</html>
